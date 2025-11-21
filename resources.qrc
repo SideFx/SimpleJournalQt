@@ -1,0 +1,50 @@
+<RCC>
+    <qresource prefix="/tb">
+        <file>assets/mainTB_Font.svg</file>
+        <file>assets/mainTB_Locked.svg</file>
+        <file>assets/mainTB_Open.svg</file>
+        <file>assets/mainTB_Quit.svg</file>
+        <file>assets/mainTB_Save.svg</file>
+        <file>assets/mainTB_SaveAs.svg</file>
+        <file>assets/mainTB_Unlocked.svg</file>
+        <file>assets/treeTB_CollapseAll.svg</file>
+        <file>assets/treeTB_CreateFolder.svg</file>
+        <file>assets/treeTB_CreateNote.svg</file>
+        <file>assets/treeTB_Delete.svg</file>
+        <file>assets/treeTB_ExpandAll.svg</file>
+        <file>assets/mainTB_New.svg</file>
+        <file>assets/mainTB_Copy.svg</file>
+        <file>assets/mainTB_Cut.svg</file>
+        <file>assets/mainTB_Paste.svg</file>
+        <file>assets/mainTB_Redo.svg</file>
+        <file>assets/mainTB_SelectAll.svg</file>
+        <file>assets/mainTB_Undo.svg</file>
+        <file>assets/mainTB_Info.svg</file>
+        <file>assets/mainTB_Settings.svg</file>
+        <file>assets/mainTB_Quit_2.svg</file>
+        <file>assets/mainTB_Edit.svg</file>
+        <file>assets/mainTB_Edit_2.svg</file>
+        <file>assets/mainTB_Key.svg</file>
+        <file>assets/mainTB_Export.svg</file>
+    </qresource>
+    <qresource prefix="/list">
+        <file>assets/list_Article.svg</file>
+        <file>assets/list_Bookmarks.svg</file>
+        <file>assets/list_Calendar.svg</file>
+        <file>assets/list_Contacts.svg</file>
+        <file>assets/list_DataTable.svg</file>
+        <file>assets/list_Drafts.svg</file>
+        <file>assets/list_Favorite.svg</file>
+        <file>assets/list_Folder.svg</file>
+        <file>assets/list_Label.svg</file>
+        <file>assets/list_Library.svg</file>
+        <file>assets/list_Objects.svg</file>
+        <file>assets/list_Pin.svg</file>
+        <file>assets/list_Smiley.svg</file>
+        <file>assets/list_Support.svg</file>
+        <file>assets/list_Work.svg</file>
+    </qresource>
+    <qresource prefix="/png">
+        <file>assets/Journal.png</file>
+    </qresource>
+</RCC>

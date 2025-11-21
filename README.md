@@ -1,0 +1,48 @@
+## SimpleJournalQt (w) 2025 Jan Buchholz
+
+**SimpleJournalQt** is a lightweight, journal-style application designed for
+organizing and editing notes with Markdown support:
+
+- On the left side, users can create and manage a list of notes (topics).
+- On the right side, a combined Markdown Viewer and Editor provides both
+  reading and editing capabilities.
+- Upon startup, most functions are disabled until a new note is created,
+  ensuring a clear workflow.
+- Each note can be assigned one of 15 available icons, with global
+  configuration options for icon size and list font style.
+- The interface is toggleable between View and Edit modes:
+- In View mode, the editor is hidden, offering a clean reading experience.
+- In Edit mode, scrolling between the editor and viewer can be synchronized for
+  seamless navigation.
+- The currently selected note in the list can be exported in Markdown format,
+  making it easy to share or archive content.
+
+
+
+##### View mode
+
+![Screenshot](images/img01.png)
+
+
+
+##### Edit mode
+
+![Screenshot](images/img02.png)
+
+
+
+##### Settings
+
+![Screenshot](images/img03.png)
+
+
+
+##### Create note (topic)
+
+![Screenshot](images/img04.png)
+
+
+
+##### Edit note (topic)
+
+![Screenshot](images/img05.png)

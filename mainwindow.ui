@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="baseSize">
+   <size>
+    <width>800</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="locale">
+     <locale language="English" country="Belgium"/>
+    </property>
+    <property name="title">
+     <string>File</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuOptions">
+    <property name="title">
+     <string>Options</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuOptions"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="listAddNote">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/treeTB_CreateNote.svg</normaloff>:/tb/assets/treeTB_CreateNote.svg</iconset>
+   </property>
+   <property name="text">
+    <string>New note</string>
+   </property>
+   <property name="toolTip">
+    <string>Create new note</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="listDeleteNote">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/treeTB_Delete.svg</normaloff>:/tb/assets/treeTB_Delete.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Delete note</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete selected note</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="mainNewFile">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_New.svg</normaloff>:/tb/assets/mainTB_New.svg</iconset>
+   </property>
+   <property name="text">
+    <string>New file</string>
+   </property>
+   <property name="toolTip">
+    <string>Create new file</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="mainOpenFile">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_Open.svg</normaloff>:/tb/assets/mainTB_Open.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Open file</string>
+   </property>
+   <property name="toolTip">
+    <string>Open existing file</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="mainSaveFile">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_Save.svg</normaloff>:/tb/assets/mainTB_Save.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Save file</string>
+   </property>
+   <property name="toolTip">
+    <string>Save file</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="mainSaveFileAs">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_SaveAs.svg</normaloff>:/tb/assets/mainTB_SaveAs.svg</iconset>
+   </property>
+   <property name="text">
+    <string>File save as</string>
+   </property>
+   <property name="toolTip">
+    <string>Save file under a different name or in a different location</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="mainToggleLock">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_Locked.svg</normaloff>:/tb/assets/mainTB_Locked.svg</iconset>
+   </property>
+   <property name="text">
+    <string>_dummy_</string>
+   </property>
+   <property name="toolTip">
+    <string>_dummy_</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="mainEditCopy">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_Copy.svg</normaloff>:/tb/assets/mainTB_Copy.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Copy</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy selected text</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="mainEditCut">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_Cut.svg</normaloff>:/tb/assets/mainTB_Cut.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Cut</string>
+   </property>
+   <property name="toolTip">
+    <string>Cut selected text</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="mainEditPaste">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_Paste.svg</normaloff>:/tb/assets/mainTB_Paste.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Paste</string>
+   </property>
+   <property name="toolTip">
+    <string>Paste from clipboard</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="mainEditSelectAll">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_SelectAll.svg</normaloff>:/tb/assets/mainTB_SelectAll.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Select all</string>
+   </property>
+   <property name="toolTip">
+    <string>Select all</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="mainEditUndo">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_Undo.svg</normaloff>:/tb/assets/mainTB_Undo.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="toolTip">
+    <string>Undo last action</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="mainEditRedo">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_Redo.svg</normaloff>:/tb/assets/mainTB_Redo.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="toolTip">
+    <string>Redo last action</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="mainAppQuit">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_Quit_2.svg</normaloff>:/tb/assets/mainTB_Quit_2.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Quit</string>
+   </property>
+   <property name="toolTip">
+    <string>Quit application</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::QuitRole</enum>
+   </property>
+  </action>
+  <action name="mainAppInfo">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_Info.svg</normaloff>:/tb/assets/mainTB_Info.svg</iconset>
+   </property>
+   <property name="text">
+    <string>_dummy_</string>
+   </property>
+   <property name="toolTip">
+    <string>_dummy_</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="listSettings">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_Settings.svg</normaloff>:/tb/assets/mainTB_Settings.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Settings</string>
+   </property>
+   <property name="toolTip">
+    <string>Note list settings</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="listEditNote">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_Edit_2.svg</normaloff>:/tb/assets/mainTB_Edit_2.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Rename note</string>
+   </property>
+   <property name="toolTip">
+    <string>Rename note</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="mainFileExport">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_Export.svg</normaloff>:/tb/assets/mainTB_Export.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Export selected note</string>
+   </property>
+   <property name="toolTip">
+    <string>Export selected note in Markdown format</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>
