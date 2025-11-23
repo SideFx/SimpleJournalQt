@@ -354,27 +354,27 @@
         <translation>Über</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="100"/>
+        <location filename="mainwindow.cpp" line="101"/>
         <source>Sync. scrolling: </source>
         <translation>Bildlauf sync.: </translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="253"/>
+        <location filename="mainwindow.cpp" line="254"/>
         <source>Edit mode</source>
         <translation>Bearbeitungsmodus</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="254"/>
+        <location filename="mainwindow.cpp" line="255"/>
         <source>Switch to edit mode</source>
         <translation>Zum Bearbeitungsmodus wechseln</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="258"/>
+        <location filename="mainwindow.cpp" line="259"/>
         <source>View mode</source>
         <translation>Anzeigemodus</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="259"/>
+        <location filename="mainwindow.cpp" line="260"/>
         <source>Switch to view mode</source>
         <translation>Zum Anzeigemodus wechseln</translation>
     </message>

@@ -46,6 +46,7 @@ MainWindow::~MainWindow() {
     delete m_mainListToolBar;
     delete m_statusBar;
     delete mc_uiLogic;
+    delete m_editorSplitter;
     delete m_treeSplitter;
     delete m_mainSplitter;
     delete mc_dialogs;
@@ -356,7 +357,7 @@ void MainWindow::onEditCopy() {
 }
 
 void MainWindow::onEditCut() {
-    if (mc_uiLogic->getmdEditor()->isReadOnly()) mc_uiLogic->getmdEditor()->cut();
+    if (!mc_uiLogic->getmdEditor()->isReadOnly()) mc_uiLogic->getmdEditor()->cut();
 }
 
 void MainWindow::onEditPaste() {
@@ -370,11 +371,11 @@ void MainWindow::onEditSelectAll() {
 }
 
 void MainWindow::onEditUndo() {
-    mc_uiLogic->getmdEditor()->undo();
+    if (!mc_uiLogic->getmdEditor()->isReadOnly()) mc_uiLogic->getmdEditor()->undo();
 }
 
 void MainWindow::onEditRedo() {
-    mc_uiLogic->getmdEditor()->redo();
+    if (!mc_uiLogic->getmdEditor()->isReadOnly()) mc_uiLogic->getmdEditor()->redo();
 }
 
 void MainWindow::onToggleLock() {
