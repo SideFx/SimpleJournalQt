@@ -38,6 +38,7 @@ private:
     QVariantMap m_prefs;
     QByteArray ascii85Encode(const QByteArray ba);
     QByteArray ascii85Decode(const QByteArray ba, bool *error);
+    QString createPath(QString path, QString orgName, QString appName);
     const quint8 cZero = 'z';
     const quint8 cBase = 33;
 

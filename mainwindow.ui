@@ -352,16 +352,91 @@
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
-  <action name="mainFileExport">
+  <action name="mainEditFormatBold">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/tb/assets/mainTB_Export.svg</normaloff>:/tb/assets/mainTB_Export.svg</iconset>
+     <normaloff>:/tb/assets/mainTB_FormatBold.svg</normaloff>:/tb/assets/mainTB_FormatBold.svg</iconset>
    </property>
    <property name="text">
-    <string>Export selected note</string>
+    <string>Format Bold</string>
    </property>
    <property name="toolTip">
-    <string>Export selected note in Markdown format</string>
+    <string>Format selection Bold</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="mainEditFormatItalic">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_FormatItalic.svg</normaloff>:/tb/assets/mainTB_FormatItalic.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Format Italic</string>
+   </property>
+   <property name="toolTip">
+    <string>Format selection Italic</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="mainEditFormatCode">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_FormatCode.svg</normaloff>:/tb/assets/mainTB_FormatCode.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Format as Code</string>
+   </property>
+   <property name="toolTip">
+    <string>Format selection as Code</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+C</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="mainEditFormatHighlight">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_FormatHighlight.svg</normaloff>:/tb/assets/mainTB_FormatHighlight.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Highlight</string>
+   </property>
+   <property name="toolTip">
+    <string>Highlight selection</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+H</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="mainEditFormatStrikethrough">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/tb/assets/mainTB_FormatStrikethrough.svg</normaloff>:/tb/assets/mainTB_FormatStrikethrough.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Format Strikethrough</string>
+   </property>
+   <property name="toolTip">
+    <string>Format selection Strikethrough</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>

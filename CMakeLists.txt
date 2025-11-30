@@ -9,30 +9,29 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network Svg)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
-set(TS_FILES SimpleJournalQt_de.ts)
-set(I18N_FILES "${CMAKE_SOURCE_DIR}/qtbase_de.qm" "${CMAKE_SOURCE_DIR}/qtbase_en.qm")
+
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
-	${TS_FILES}
 )
-qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES de)
+add_subdirectory("${CMAKE_SOURCE_DIR}/md4c")
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets LinguistTools)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Network Svg)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
+set(QM_FILES ${CMAKE_SOURCE_DIR}/translations/qt_en.qm)
+
+if(APPLE)
 set(MACOSX_BUNDLE_ICON_FILE app.icns)
 set(APP_ICON "${CMAKE_SOURCE_DIR}/app.icns")
 set_source_files_properties(${APP_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
-set_source_files_properties(${I18N_FILES} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources/i18n")
-
-qt_add_translations(SimpleJournalQt SimpleJournalQt_de.ts)
+endif()
 
     qt_add_executable(SimpleJournalQt
         MANUAL_FINALIZATION
@@ -49,7 +48,7 @@ qt_add_translations(SimpleJournalQt SimpleJournalQt_de.ts)
         assets/mainTB_Settings.svg
         dialogs.h dialogs.cpp
         uilogic.h uilogic.cpp
-        jlistwidget.h jlistwidget.cpp
+        jblistwidget.h jblistwidget.cpp
         assets/mainTB_Quit_2.svg
         assets/list_Article.svg assets/list_Bookmarks.svg assets/list_Calendar.svg assets/list_Contacts.svg assets/list_DataTable.svg assets/list_Drafts.svg assets/list_Favorite.svg assets/list_Folder.svg assets/list_Label.svg assets/list_Library.svg assets/list_Objects.svg assets/list_Pin.svg assets/list_Smiley.svg assets/list_Support.svg assets/list_Work.svg
         listfontdialog.h listfontdialog.cpp listfontdialog.ui
@@ -62,28 +61,28 @@ qt_add_translations(SimpleJournalQt SimpleJournalQt_de.ts)
         appicon.rc
         io.h io.cpp
         assets/Journal.png
-        ${I18N_FILES}
         aboutdialog.h aboutdialog.cpp aboutdialog.ui
         assets/mainTB_Export.svg
         scrollsynchronizer.h scrollsynchronizer.cpp
         LICENSE.md README.md
         images/img01.png images/img02.png images/img03.png images/img04.png images/img05.png
+        imagehandler.cpp imagehandler.h synchelper.cpp synchelper.h
+        assets/mainTB_FormatBold.svg assets/mainTB_FormatCode.svg assets/mainTB_FormatHighlight.svg assets/mainTB_FormatItalic.svg assets/mainTB_FormatStrikethrough.svg assets/mainTB_FormatUnderlined.svg
     )
 endif()
 
 target_link_libraries(SimpleJournalQt PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
-target_link_libraries(SimpleJournalQt PRIVATE Qt6::Core Qt6::Widgets)
-add_dependencies(SimpleJournalQt update_translations)
+target_link_libraries(SimpleJournalQt PRIVATE Qt6::Core Qt6::Widgets Qt6::Network Qt6::Svg)
+target_link_libraries(SimpleJournalQt PRIVATE md4c md4c-html)
+
 set_target_properties(SimpleJournalQt PROPERTIES
     ${BUNDLE_ID_OPTION}
-    UPDATE_TRANSLATIONS .
+#    UPDATE_TRANSLATIONS .
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
-#WIN32
-set(TRANSLATION_DIR "${PROJECT_BINARY_DIR}/translations")
 
 include(GNUInstallDirs)
 install(TARGETS SimpleJournalQt
@@ -96,12 +95,37 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(SimpleJournalQt)
 endif()
 
-if (WIN32)
-    add_custom_command(TARGET SimpleJournalQt POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${TRANSLATION_DIR}
-        COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_SOURCE_DIR}/qtbase_de.qm" ${TRANSLATION_DIR}
-        COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_SOURCE_DIR}/qtbase_en.qm" ${TRANSLATION_DIR}
-        COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_BINARY_DIR}/SimpleJournalQt_de.qm" ${TRANSLATION_DIR}
+# --- Windows ---
+if(WIN32)
+    set(QM_DEST ${CMAKE_BINARY_DIR}/translations)
+    add_custom_command(
+        TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${QM_DEST}
+        COMMAND ${CMAKE_COMMAND} -E copy ${QM_FILES} ${QM_DEST}
     )
+endif()
+
+# --- macOS ---
+if(APPLE)
+    # app bundle
+    set(QM_DEST ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.app/Contents/Resources/i18n)
+    add_custom_command(
+        TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${QM_DEST}
+        COMMAND ${CMAKE_COMMAND} -E copy ${QM_FILES} ${QM_DEST}
+    )
+endif()
+
+# --- Linux/Unix ---
+if(UNIX AND NOT APPLE)
+    # local
+    set(QM_DEST ${CMAKE_BINARY_DIR}/translations)
+    add_custom_command(
+        TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${QM_DEST}
+        COMMAND ${CMAKE_COMMAND} -E copy ${QM_FILES} ${QM_DEST}
+    )
+    # system
+    install(FILES ${QM_FILES} DESTINATION share/${PROJECT_NAME}/translations)
 endif()
 

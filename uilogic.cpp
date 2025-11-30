@@ -17,13 +17,15 @@ UILogic::UILogic(QObject *parent) : QObject{parent} {
     createMdViewer();
     createMdEditor();
     resetAll();
-    connect(m_listWidget, &JListWidget::currentItemChanged, this, &UILogic::onCurrentItemChanged);
-    connect(m_listWidget, &JListWidget::dropEventAccepted, this, &UILogic::onJListDropEvent);
+    mc_synchelper = new SyncHelper(m_mdEditor, m_mdViewer);
+    connect(m_listWidget, &JBListWidget::currentItemChanged, this, &UILogic::onCurrentItemChanged);
+    connect(m_listWidget, &JBListWidget::dropEventAccepted, this, &UILogic::onJListDropEvent);
     connect(m_mdEditor, &QTextEdit::textChanged, this, &UILogic::onTextChanged);
 }
 
 UILogic::~UILogic() {
     delete m_listWidget;
+    delete mc_synchelper;
     delete m_mdViewer;
     delete m_mdEditor;
 }
@@ -54,7 +56,7 @@ void UILogic::resetAll() {
 }
 
 void UILogic::createListWidget(){
-    m_listWidget = new JListWidget();
+    m_listWidget = new JBListWidget();
     m_listWidget->setMinimumWidth(150);
     m_listWidget->setViewMode(QListView::ListMode);
     m_listWidget->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -71,6 +73,7 @@ void UILogic::createMdViewer() {
     m_mdViewer = new QTextBrowser();
     m_mdViewer->setWordWrapMode(QTextOption::WordWrap);
     m_mdViewer->setLineWrapMode(QTextEdit::WidgetWidth);
+    m_mdViewer->setAcceptRichText(false);
     m_mdViewer->setOpenExternalLinks(true);
 }
 
@@ -209,7 +212,7 @@ QByteArray UILogic::dataToJson() {
     QJsonArray array = {};
     QList<QListWidgetItem*> itemList = m_listWidget->selectedItems();
     if (!itemList.empty()) {
-        setPayload(itemList[0]->type(), m_mdViewer->toMarkdown());
+        setPayload(itemList[0]->type(), m_mdEditor->toPlainText());
     }
     for (int i = 0; i < m_listWidget->count(); i++) {
         QListWidgetItem* item = m_listWidget->item(i);
@@ -258,8 +261,8 @@ void UILogic::openListSettingsDialog() {
 }
 
 void UILogic::onTextChanged() {
-    QString md = m_mdEditor->toPlainText();
-    m_mdViewer->setMarkdown(md);
+    mc_synchelper->syncToViewer();
+    m_mdEditor->setFocus();
 }
 
 void UILogic::onCurrentItemChanged(QListWidgetItem *current, QListWidgetItem *previous) {

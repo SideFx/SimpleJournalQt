@@ -24,7 +24,9 @@ private:
     Ui::AboutDialog *ui;
     QString TITLE_ABOUT = tr("About SimpleJournalQt");
     QString TxtAboutJournal = tr("SimpleJournalQt (w) 2025 Jan Buchholz\n***\n") +
-    tr("Created with Qt Community Edition v") + qVersion() + tr(" (https://www.qt.io).");
+    tr("Created with Qt Community Edition v") + qVersion() + tr(" (https://www.qt.io).") +
+    tr("\n***\nThanks to Martin Mitáš (mity)\n") +
+    tr("and all contributors to the \"md4c\" library:\nhttps://github.com/mity/md4c");
 };
 
 

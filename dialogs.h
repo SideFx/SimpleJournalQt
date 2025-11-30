@@ -20,7 +20,6 @@ public:
     ~Dialogs();
     QString showOpenFileDialog(QString folder);
     QString showSaveFileDialog(QString folder, QString fileName);
-    QString showSaveFileDialogMd(QString folder, QString fileName);
     int showDialogUnsavedChanges();
     int showDialogDeleteNote();
     void showDialogDisplayError(QString message);
@@ -34,7 +33,7 @@ private:
                                              "If you don't save, the changes will be lost.");
     QString const MSG_DELETENOTE = QObject::tr("Do you really want to delete the selected note?");
     QString const FILE_FILTER = QObject::tr("SimpleJournal files (*.smp)");
-    QString const FILE_FILTER_MD = QObject::tr("Markdown files (*.md)");
+    QString const DEFAULT_SUFFIX = ".smp";
 
 };
 

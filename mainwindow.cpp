@@ -10,6 +10,7 @@
 #include <QStandardPaths>
 #include <QMessageBox>
 #include <QFileInfo>
+#include <QDir>
 #include "stylesheets.h"
 #include "constants.h"
 #include "jbpreferences.h"
@@ -32,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     setConnections();
     m_synchronizer =new ScrollSynchronizer(mc_uiLogic->getmdViewer(),
         mc_uiLogic->getmdEditor(), m_editorSplitter);
-    m_synchronizer->setEnabled(m_syncBox->isChecked());
+    m_synchronizer->setEnabled(true);
     fileNew();
 }
 
@@ -40,8 +41,6 @@ MainWindow::~MainWindow() {
     delete ui;
     delete m_fontComboBox;
     delete m_fontSizeBox;
-    delete m_syncBox;
-    delete m_syncLabel;
     delete m_mainToolBar;
     delete m_mainListToolBar;
     delete m_statusBar;
@@ -93,15 +92,14 @@ void MainWindow::createToolBars() {
     m_mainToolBar->addAction(ui->mainEditUndo);
     m_mainToolBar->addAction(ui->mainEditRedo);
     m_mainToolBar->addSeparator();
+    m_mainToolBar->addAction(ui->mainEditFormatBold);
+    m_mainToolBar->addAction(ui->mainEditFormatItalic);
+    m_mainToolBar->addAction(ui->mainEditFormatStrikethrough);
+    m_mainToolBar->addAction(ui->mainEditFormatCode);
+    m_mainToolBar->addAction(ui->mainEditFormatHighlight);
+    m_mainToolBar->addSeparator();
     m_mainToolBar->addAction(ui->mainToggleLock);
     m_mainToolBar->addSeparator();
-    m_mainToolBar->addAction(ui->mainFileExport);
-    m_mainToolBar->addSeparator();
-    m_syncLabel = new QLabel;
-    m_syncLabel->setText(tr("Sync. scrolling: "));
-    m_mainToolBar->addWidget(m_syncLabel);
-    m_syncBox = new QCheckBox;
-    m_mainToolBar->addWidget(m_syncBox);
     QWidget* spacerSmall = new QWidget;
     spacerSmall->setMinimumWidth(25);
     m_mainToolBar->addWidget(spacerSmall);
@@ -153,8 +151,6 @@ void MainWindow::populateMainMenu() {
     ui->menuFile->addAction(ui->mainSaveFile);
     ui->menuFile->addAction(ui->mainSaveFileAs);
     ui->menuFile->addSeparator();
-    ui->menuFile->addAction(ui->mainFileExport);
-    ui->menuFile->addSeparator();
     ui->menuFile->addAction(ui->mainAppQuit);
     ui->menuEdit->addAction(ui->mainEditCopy);
     ui->menuEdit->addAction(ui->mainEditCut);
@@ -164,6 +160,12 @@ void MainWindow::populateMainMenu() {
     ui->menuEdit->addSeparator();
     ui->menuEdit->addAction(ui->mainEditUndo);
     ui->menuEdit->addAction(ui->mainEditRedo);
+    ui->menuEdit->addSeparator();
+    ui->menuEdit->addAction(ui->mainEditFormatBold);
+    ui->menuEdit->addAction(ui->mainEditFormatItalic);
+    ui->menuEdit->addAction(ui->mainEditFormatStrikethrough);
+    ui->menuEdit->addAction(ui->mainEditFormatCode);
+    ui->menuEdit->addAction(ui->mainEditFormatHighlight);
     ui->menuEdit->addSeparator();
     ui->menuEdit->addAction(ui->listAddNote);
     ui->menuEdit->addAction(ui->listEditNote);
@@ -185,11 +187,14 @@ void MainWindow::setConnections() {
     connect(ui->mainEditSelectAll, &QAction::triggered, this, &MainWindow::onEditSelectAll);
     connect(ui->mainEditUndo, &QAction::triggered, this, &MainWindow::onEditUndo);
     connect(ui->mainEditRedo, &QAction::triggered, this, &MainWindow::onEditRedo);
+    connect(ui->mainEditFormatBold, &QAction::triggered, this, &MainWindow::onEditFormat);
+    connect(ui->mainEditFormatItalic, &QAction::triggered, this, &MainWindow::onEditFormat);
+    connect(ui->mainEditFormatStrikethrough, &QAction::triggered, this, &MainWindow::onEditFormat);
+    connect(ui->mainEditFormatCode, &QAction::triggered, this, &MainWindow::onEditFormat);
+    connect(ui->mainEditFormatHighlight, &QAction::triggered, this, &MainWindow::onEditFormat);
     connect(ui->mainToggleLock, &QAction::triggered, this, &MainWindow::onToggleLock);
-    connect(ui->mainFileExport, &QAction::triggered, this, &MainWindow::onFileExport);
     connect(ui->mainAppInfo, &QAction::triggered, this, &MainWindow::onAppInfo);
     connect(ui->mainAppQuit, &QAction::triggered, this, &MainWindow::onAppQuit);
-    connect(m_syncBox, &QCheckBox::checkStateChanged, this, &MainWindow::onStateChanged);
     connect(m_fontComboBox, &QFontComboBox::currentFontChanged, this, &MainWindow::onCurrentFontChanged);
     connect(m_fontSizeBox, &QComboBox::currentTextChanged, this, &MainWindow::onCurrentTextChanged);
     connect(ui->listAddNote, &QAction::triggered, this, &MainWindow::onAddNote);
@@ -205,7 +210,6 @@ void MainWindow::savePreferences() {
     prefs->PushArray(SET_WGEOMETRY, saveGeometry());
     prefs->PushArray(SET_WSTATE, saveState(0));
     prefs->PushArray(SET_SSTATE, m_mainSplitter->saveState());
-    prefs->PushBoolean(SET_SYNC, m_syncBox->isChecked());
     prefs->PushString(SET_LASTFOLDER, m_lastFolder);
     prefs->PushFont(SET_EDITORFONT, mc_uiLogic->getmdViewer()->font());
     prefs->PushFont(SET_LISTFONT, mc_uiLogic->getListWidget()->font());
@@ -221,7 +225,6 @@ void MainWindow::loadPreferences() {
         try {
             restoreGeometry(prefs->PopArray(SET_WGEOMETRY));
             restoreState(prefs->PopArray(SET_WSTATE));
-            m_syncBox->setChecked(prefs->PopBoolean(SET_SYNC));
             m_mainSplitter->restoreState(prefs->PopArray(SET_SSTATE));
             m_lastFolder = prefs->PopString(SET_LASTFOLDER);
             QFont efont = prefs->PopFont(SET_EDITORFONT);
@@ -267,13 +270,12 @@ void MainWindow::setLockStatus() {
     ui->mainEditPaste->setEnabled(!b && c);
     ui->mainEditUndo->setEnabled(!b && c);
     ui->mainEditRedo->setEnabled(!b && c);
+    enableFormatActions(!b && c);
     mc_uiLogic->getmdEditor()->setReadOnly(b || !c);
     mc_uiLogic->getListWidget()->setDragEnabled(!b && c);
     if (b) m_editorSplitter->setSizes({1, 0});
     else m_editorSplitter->setSizes({1, 1});
 }
-
-/* Misc. events */
 
 void MainWindow::closeEvent(QCloseEvent *e) {
     if (isWindowModified()) {
@@ -318,12 +320,33 @@ void MainWindow::onCurrentTextChanged(const QString size) {
     mc_uiLogic->getmdEditor()->setFont(font);
 }
 
-// enable/disable scroll sync.
-void MainWindow::onStateChanged(const Qt::CheckState state) {
-   m_synchronizer->setEnabled(state == Qt::Checked);
+void MainWindow::onEditFormat() {
+    QTextCursor cursor = mc_uiLogic->getmdEditor()->textCursor();
+    if (cursor.hasSelection()) {
+        int s_begin = cursor.selectionStart();
+        int s_end = cursor.selectionEnd();
+        QAction* action = qobject_cast<QAction*>(sender());
+        if (!action) return;
+        QString format{};
+        if (action == ui->mainEditFormatBold) {
+            format = "**";
+        } else if (action == ui->mainEditFormatItalic) {
+            format = "*";
+        } else if (action == ui->mainEditFormatStrikethrough) {
+            format = "~";
+        } else if (action == ui->mainEditFormatCode) {
+            format = "`";
+        } else if (action == ui->mainEditFormatHighlight) {
+            format = "==";
+        }
+        if (!format.isEmpty()) {
+            cursor.setPosition(s_end, QTextCursor::MoveAnchor);
+            cursor.insertText(format);
+            cursor.setPosition(s_begin, QTextCursor::MoveAnchor);
+            cursor.insertText(format);
+        }
+    }
 }
-
-/* Action events */
 
 void MainWindow::onNewFile() {
     if (isWindowModified()) {
@@ -380,19 +403,6 @@ void MainWindow::onEditRedo() {
 
 void MainWindow::onToggleLock() {
     setLockStatus();
-}
-
-void MainWindow::onFileExport() {
-    QString result{};
-    UILogic::journalData data = mc_uiLogic->getSelectedListItem();
-    if (!data.subject.isEmpty() && !data.payload.isEmpty()) {
-        Io* io = new Io();
-        QString fileName = io->sanitizeFilename(data.subject);
-        QString fName = mc_dialogs->showSaveFileDialogMd(m_lastFolder, fileName);
-        if (!fName.isEmpty()) result = io->save(fName, data.payload.toUtf8());
-        delete io;
-        if (!result.isEmpty()) mc_dialogs->showDialogDisplayError(result);
-    }
 }
 
 void MainWindow::onAppInfo() {
@@ -476,7 +486,10 @@ bool MainWindow::fileSave(bool saveAs) { //saveAs default false
         QFileInfo fileInfo(fName);
         m_lastFolder = fileInfo.path();
         m_fileName = fileInfo.fileName();
-    } else fName = m_lastFolder + "/" + m_fileName;
+    } else {
+        QFileInfo fileInfo(m_lastFolder, m_fileName);
+        fName = fileInfo.absoluteFilePath();
+    }
     QByteArray ba = mc_uiLogic->dataToJson();
     Io* io = new Io();
     QString result = io->save(fName, ba);
@@ -491,14 +504,19 @@ bool MainWindow::fileSave(bool saveAs) { //saveAs default false
     return false;
 }
 
-/* Action control */
+void MainWindow::enableFormatActions(bool enabled) {
+    ui->mainEditFormatBold->setEnabled(enabled);
+    ui->mainEditFormatItalic->setEnabled(enabled);
+    ui->mainEditFormatStrikethrough->setEnabled(enabled);
+    ui->mainEditFormatCode->setEnabled(enabled);
+    ui->mainEditFormatHighlight->setEnabled(enabled);
+}
 
 void MainWindow::settingsAfterLoad() {
     //enable save, set locked, enable lock, set readonly
     ui->mainSaveFile->setEnabled(true);
     ui->mainSaveFileAs->setEnabled(true);
     ui->mainToggleLock->setChecked(true);
-    ui->mainFileExport->setEnabled(true);
     setLockStatus();
     mc_uiLogic->getmdEditor()->setReadOnly(true);
     setWindowModified(false);
@@ -508,9 +526,8 @@ void MainWindow::settingsAfterNew() {
     //disable save, set unlocked, disable lock, set readonly
     ui->mainSaveFile->setEnabled(false);
     ui->mainSaveFileAs->setEnabled(false);
-    ui->mainFileExport->setEnabled(false);
     ui->mainToggleLock->setChecked(false);
-    ui->mainFileExport->setEnabled(false);
+    enableFormatActions(false);
     setLockStatus();
     ui->listEditNote->setEnabled(false);
     ui->listDeleteNote->setEnabled(false);
@@ -525,9 +542,8 @@ void MainWindow::settingsAfterAddNote() {
     //enable save, set unlocked, enable lock, set readwrite
     ui->mainSaveFile->setEnabled(true);
     ui->mainSaveFileAs->setEnabled(true);
-    ui->mainFileExport->setEnabled(true);
     ui->mainToggleLock->setChecked(false);
-    ui->mainFileExport->setEnabled(true);
+    enableFormatActions(true);
     setLockStatus();
     ui->listEditNote->setEnabled(true);
     ui->listDeleteNote->setEnabled(true);
@@ -545,10 +561,10 @@ void MainWindow::settingsAfterDeleteNote() {
     setWindowModified(b);
     ui->mainSaveFile->setEnabled(b);
     ui->mainSaveFileAs->setEnabled(b);
-    ui->mainFileExport->setEnabled(b);
     ui->mainToggleLock->setEnabled(b);
     ui->listEditNote->setEnabled(b);
     ui->listDeleteNote->setEnabled(b);
+    enableFormatActions(b);
     bool c = b || ui->mainToggleLock->isChecked();
     mc_uiLogic->getmdEditor()->setReadOnly(!c);
 }

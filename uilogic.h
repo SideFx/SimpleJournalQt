@@ -12,7 +12,8 @@
 #include <QTextBrowser>
 #include <QJsonObject>
 #include <QByteArray>
-#include "jlistwidget.h"
+#include "jblistwidget.h"
+#include "synchelper.h"
 
 class UILogic : public QObject {
     Q_OBJECT
@@ -42,10 +43,11 @@ public:
     QByteArray dataToJson();
 
 private:
-    JListWidget *m_listWidget;
+    JBListWidget *m_listWidget;
     QTextBrowser *m_mdViewer;
     QTextEdit *m_mdEditor;
     QVector<journalData> m_data;
+    SyncHelper *mc_synchelper;
     int m_id;
     bool m_textChangeIgnore;
     void createListWidget();

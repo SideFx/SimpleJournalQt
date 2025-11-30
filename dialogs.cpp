@@ -28,31 +28,10 @@ QString Dialogs::showOpenFileDialog(QString folder) {
     openDialog.setAcceptMode(QFileDialog::AcceptOpen);
     openDialog.setFileMode(QFileDialog::ExistingFile);
     openDialog.setNameFilter(FILE_FILTER);
-    openDialog.setOptions(QFileDialog::ReadOnly);
+    openDialog.setOptions(QFileDialog::DontUseNativeDialog | QFileDialog::ReadOnly);
     openDialog.setViewMode(QFileDialog::Detail);
     if (openDialog.exec() == QDialog::Accepted) {
         QStringList files = openDialog.selectedFiles();
-        if (!files.empty()) fileName = files.first();
-    }
-    return fileName;
-}
-
-QString Dialogs::showSaveFileDialogMd(QString folder, QString fileName) {
-    QFileDialog saveDialog;
-    saveDialog.setParent(mainWindow, Qt::Dialog|
-                                     Qt::WindowSystemMenuHint|
-                                     Qt::WindowCloseButtonHint|
-                                     Qt::WindowTitleHint|
-                                     Qt::CustomizeWindowHint);
-    saveDialog.setDirectory(folder);
-    saveDialog.setAcceptMode(QFileDialog::AcceptSave);
-    saveDialog.setFileMode(QFileDialog::AnyFile);
-    saveDialog.setNameFilter(FILE_FILTER_MD);
-    saveDialog.setOptions(QFileDialog::DontUseCustomDirectoryIcons);
-    saveDialog.setViewMode(QFileDialog::Detail);
-    saveDialog.selectFile(fileName);
-    if (saveDialog.exec() == QDialog::Accepted) {
-        QStringList files = saveDialog.selectedFiles();
         if (!files.empty()) fileName = files.first();
     }
     return fileName;
@@ -63,15 +42,16 @@ QString Dialogs::showSaveFileDialog(QString folder, QString fileName) {
     QString fname;
     if (fileName.isEmpty()) fname = UNTITLED_DOCUMENT; else fname = fileName;
     saveDialog.setParent(mainWindow, Qt::Dialog|
-                                         Qt::WindowSystemMenuHint|
-                                         Qt::WindowCloseButtonHint|
-                                         Qt::WindowTitleHint|
-                                         Qt::CustomizeWindowHint);
+                                     Qt::WindowSystemMenuHint|
+                                     Qt::WindowCloseButtonHint|
+                                     Qt::WindowTitleHint|
+                                     Qt::CustomizeWindowHint);
     saveDialog.setDirectory(folder);
     saveDialog.setAcceptMode(QFileDialog::AcceptSave);
     saveDialog.setFileMode(QFileDialog::AnyFile);
     saveDialog.setNameFilter(FILE_FILTER);
-    saveDialog.setOptions(QFileDialog::DontUseCustomDirectoryIcons);
+    saveDialog.setDefaultSuffix(DEFAULT_SUFFIX);
+    saveDialog.setOption(QFileDialog::DontUseNativeDialog, true);
     saveDialog.setViewMode(QFileDialog::Detail);
     saveDialog.selectFile(fileName);
     if (saveDialog.exec() == QDialog::Accepted) {

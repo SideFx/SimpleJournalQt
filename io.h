@@ -18,7 +18,6 @@ public:
     ~Io() = default;
     QString save(QString fileName, QByteArray payload);
     QString load(QString fileName, QByteArray *payload);
-    QString sanitizeFilename(const QString& input);
 
 private:
     QString const ERR_FILEREAD = QObject::tr("Error reading file.");

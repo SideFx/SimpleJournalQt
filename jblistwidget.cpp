@@ -1,19 +1,19 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        jlistwidget.cpp
+// Name:        jblistwidget.cpp
 // Purpose:     QListWidget subclassed
 // Author:      Jan Buchholz
 // Created:     2025-11-19
 /////////////////////////////////////////////////////////////////////////////
 
-#include "jlistwidget.h"
+#include "jblistwidget.h"
 
-JListWidget::JListWidget(QWidget *parent) : QListWidget(parent) {
+JBListWidget::JBListWidget(QWidget *parent) : QListWidget(parent) {
 }
 
-JListWidget::~JListWidget() {
+JBListWidget::~JBListWidget() {
 }
 
-void JListWidget::dropEvent(QDropEvent *event) {
+void JBListWidget::dropEvent(QDropEvent *event) {
     QListView::dropEvent(event);
     if (event->isAccepted()) {
         emit dropEventAccepted();

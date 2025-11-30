@@ -40,8 +40,6 @@ private:
     QFontComboBox *m_fontComboBox;
     QComboBox *m_fontSizeBox;
     ScrollSynchronizer *m_synchronizer;
-    QLabel *m_syncLabel;
-    QCheckBox *m_syncBox;
     UILogic *mc_uiLogic;
     QString m_lastFolder;
     QString m_fileName;
@@ -58,6 +56,7 @@ private:
     void fileNew();
     bool fileOpen();
     bool fileSave(bool saveAs = false);
+    void enableFormatActions(bool enabled);
     void settingsAfterLoad();
     void settingsAfterNew();
     void settingsAfterAddNote();
@@ -79,16 +78,15 @@ private slots:
     void onEditUndo();
     void onEditRedo();
     void onToggleLock();
-    void onFileExport();
     void onAddNote();
     void onDeleteNote();
     void onEditNote();
 
-    void onStateChanged(const Qt::CheckState);
     void onCurrentFontChanged(const QFont);
     void onCurrentTextChanged(const QString);
     void onTextChanged();
     void onListChanged();
+    void onEditFormat();
 
 };
 

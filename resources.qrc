@@ -26,6 +26,12 @@
         <file>assets/mainTB_Edit_2.svg</file>
         <file>assets/mainTB_Key.svg</file>
         <file>assets/mainTB_Export.svg</file>
+        <file>assets/mainTB_FormatBold.svg</file>
+        <file>assets/mainTB_FormatCode.svg</file>
+        <file>assets/mainTB_FormatHighlight.svg</file>
+        <file>assets/mainTB_FormatItalic.svg</file>
+        <file>assets/mainTB_FormatStrikethrough.svg</file>
+        <file>assets/mainTB_FormatUnderlined.svg</file>
     </qresource>
     <qresource prefix="/list">
         <file>assets/list_Article.svg</file>

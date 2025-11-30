@@ -6,9 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "io.h"
-#include "constants.h"
 #include <QDir>
-#include <QRegularExpression>
 
 QString Io::save(QString fileName, QByteArray payload) {
     QFile file(fileName);
@@ -25,13 +23,4 @@ QString Io::load(QString fileName, QByteArray *payload) {
     *payload = file.readAll();
     file.close();
     return {};
-}
-
-QString Io::sanitizeFilename(const QString& input) {
-    static const QString invalidChars = R"delim(<>:"/\|?*)delim";
-    QString result;
-    for (QChar ch : input) {
-        result += invalidChars.contains(ch) ? '_' : ch;
-    }
-    return result;
 }
