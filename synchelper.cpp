@@ -77,7 +77,8 @@ void SyncHelper::syncToViewer() {
                             QTextCursor cursor(block);
                             cursor.movePosition(QTextCursor::EndOfBlock);
                             m_viewer->setTextCursor(cursor);
-                            m_viewer->ensureCursorVisible();
+                            m_viewer->update();
+                            m_viewer->ensureCursorVisible();                           
                             return;
                         }
                     }
@@ -85,7 +86,6 @@ void SyncHelper::syncToViewer() {
             }
         }
     }
-    m_viewer->update();
 }
 
 void SyncHelper::processImages() {
