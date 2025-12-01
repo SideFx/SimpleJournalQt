@@ -16,10 +16,10 @@ UILogic::UILogic(QObject *parent) : QObject{parent} {
     createListWidget();
     createMdViewer();
     createMdEditor();
-    resetAll();
     mc_synchelper = new SyncHelper(m_mdEditor, m_mdViewer);
+    resetAll();
     connect(m_listWidget, &JBListWidget::currentItemChanged, this, &UILogic::onCurrentItemChanged);
-    connect(m_listWidget, &JBListWidget::dropEventAccepted, this, &UILogic::onJListDropEvent);
+    connect(m_listWidget, &JBListWidget::dropEventAccepted, this, &UILogic::onJBListDropEvent);
     connect(m_mdEditor, &QTextEdit::textChanged, this, &UILogic::onTextChanged);
 }
 
@@ -30,9 +30,10 @@ UILogic::~UILogic() {
     delete m_mdEditor;
 }
 
-void UILogic::startUp(const QByteArray ba) {
+void UILogic::startUp(const QByteArray ba, QString workDir) {
     resetAll();
     if (ba.isEmpty()) return;
+    mc_synchelper->setDocumentPath(workDir);
     jsonToData(ba);
     IconList *iconList = new IconList();
     for (auto &j : m_data) {
@@ -52,6 +53,7 @@ void UILogic::resetAll() {
     m_mdViewer->clear();
     m_mdEditor->clear();
     m_data.clear();
+    mc_synchelper->invalidateImageCache();
     m_id = QListWidgetItem::UserType;
 }
 
@@ -249,6 +251,11 @@ int UILogic::getItemCount() {
     return m_listWidget->count();
 }
 
+void UILogic::refreshDocument(QString workDir) {
+    mc_synchelper->setDocumentPath(workDir);
+    mc_synchelper->refreshDocument();
+}
+
 void UILogic::openListSettingsDialog() {
     ListFontDialog *dlg = new ListFontDialog();
     QFont font = m_listWidget->font();
@@ -274,9 +281,10 @@ void UILogic::onCurrentItemChanged(QListWidgetItem *current, QListWidgetItem *pr
         QString md = getPayLoad(current->type());
         m_mdEditor->setPlainText(md);
         m_textChangeIgnore = false;
+        m_mdEditor->setFocus();
     }
 }
 
-void UILogic::onJListDropEvent() {
+void UILogic::onJBListDropEvent() {
     emit listChanged();
 }

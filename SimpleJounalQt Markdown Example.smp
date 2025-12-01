@@ -1,0 +1,20 @@
+[
+    {
+        "icon": 11,
+        "id": 1001,
+        "payload": "# Headline size 1\n## Headline size 2\n### Headline size 3\n#### Headline size 4\n##### Headline size 5\n\n**Lorem ipsum** dolor sit amet, *consectetur adipiscing elit*, sed do eiusmod tempor incididunt ~ut labore et dolore magna aliqua~. `Ut enim ad minim veniam`, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ==Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.== ***Excepteur sint occaecat cupidatat non proident***, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\n### Table example\n\n| Column 1 | Column 2 | Column 3 |\n| --- | --- | --- |\n| c1r1 | c2r1 | c3r1 |\n| c1r2 | c2r2 | c3r2 |\n| c1r3 | c2r3 | c3r3 |\n\n### Horizontal rule\n\n---\n\n### Ordered list\n1. Item 1\n2. Item 2\n3. Item 3\n4. Item 4\n5. Item 5\n\n### Unordered list\n- Item 1\n- Item 2\n- Item 3\n- Item 4\n- Item 5\n\n### Links\n[Link to Google](https://www.google.com)\n\n",
+        "subject": "Markdown Example"
+    },
+    {
+        "icon": 10,
+        "id": 1002,
+        "payload": "### Tips & Tricks\n- After creating a new file, if you plan to insert images from the local file system using relative paths, it is recommended to first save the file in its intended location so that the image paths can be properly resolved.\n- To insert a hoizontal rule, you must press Enter after typing three dashes; otherwise, the rule will not be created.\n- There is no shortcut for creating bold and italic formatting like ***This text is bold and italic***. To achieve this, enclose the text with three asterisks: &#42;&#42;&#42;This text is bold and italic&#42;&#42;&#42;\n\n",
+        "subject": "Tips & Tricks"
+    },
+    {
+        "icon": 1,
+        "id": 1003,
+        "payload": "### SimpleJournalQt (w) 2025 Jan Buchholz\n\n**SimpleJournalQt** is a lightweight, journal-style application designed for\norganizing and editing notes with Markdown support:\n\n- On the left side, users can create and manage a list of notes (topics).\n- On the right side, a combined Markdown Viewer and Editor provides both\n  reading and editing capabilities.\n- Upon startup, most functions are disabled until a new note is created,\n  ensuring a clear workflow.\n- Each note can be assigned one of 15 available icons, with global\n  configuration options for icon size and list font style.\n- The interface is toggleable between View and Edit modes:\n- In View mode, the editor is hidden, offering a clean reading experience.\n- In Edit mode, scrolling between the editor and viewer can be synchronized for\n  seamless navigation.\n\n\n\n\n",
+        "subject": "About SimpleJournalQt"
+    }
+]

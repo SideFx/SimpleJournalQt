@@ -468,7 +468,7 @@ bool MainWindow::fileOpen() {
         QString result = io->load(fName, &ba);
         delete io;
         if (result.isEmpty()) {
-            mc_uiLogic->startUp(ba);
+            mc_uiLogic->startUp(ba, m_lastFolder);
             QString title = QString(APPNAME) + " - " + fileInfo.fileName() + PLACEHOLDER;
             setWindowTitle(title);
             settingsAfterLoad();
@@ -495,6 +495,7 @@ bool MainWindow::fileSave(bool saveAs) { //saveAs default false
     QString result = io->save(fName, ba);
     delete io;
     if (result.isEmpty()) {
+        mc_uiLogic->refreshDocument(m_lastFolder);
         QString title = QString(APPNAME) + " - " + m_fileName + PLACEHOLDER;
         setWindowTitle(title);
         setWindowModified(false);

@@ -31,7 +31,7 @@ public:
     QTextEdit* getmdViewer() const {return m_mdViewer;}
     QTextEdit* getmdEditor() const {return m_mdEditor;}
     void resetAll();
-    void startUp(const QByteArray ba);
+    void startUp(const QByteArray ba, QString workDir);
     bool addListItem();
     bool editListItem();
     bool deleteListItem();
@@ -40,6 +40,7 @@ public:
     void openListSettingsDialog();
     bool isAnyItemSelected();
     int getItemCount();
+    void refreshDocument(QString workDir);
     QByteArray dataToJson();
 
 private:
@@ -61,7 +62,7 @@ private:
 
 private slots:
     void onCurrentItemChanged(QListWidgetItem*, QListWidgetItem*);
-    void onJListDropEvent();
+    void onJBListDropEvent();
     void onTextChanged();
 
 signals:
