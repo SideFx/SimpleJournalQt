@@ -52,3 +52,9 @@ organizing and editing notes with Markdown support:
 
 ![svg](assets/list_Objects.svg) ![svg](assets/list_Pin.svg) ![svg](assets/list_Smiley.svg) ![svg](assets/list_Support.svg) ![svg](assets/list_Work.svg)
 
+
+
+### Credits
+[Special thanks to Martin Mitáš (mity) and all contributors to the md4c library.](https://github.com/mity/md4c)
+
+
