@@ -9,7 +9,7 @@
 #include <QTextBlock>
 #include <QScrollBar>
 #include <QRegularExpression>
-#include "md4c-html.h"
+#include "md4c/src/md4c-html.h"
 
 SyncHelper::SyncHelper(QTextEdit* editor, QTextBrowser* viewer)
     : m_editor(editor), m_viewer(viewer) {
@@ -71,7 +71,7 @@ void SyncHelper::syncToViewer() {
             if (frag.isValid()) {
                 if (frag.charFormat().isAnchor()) {
                     QTextCharFormat ch = frag.charFormat().toCharFormat();
-                    QStringList list = ch.anchorNames();
+                    const QStringList list = ch.anchorNames();
                     for (const auto &name : list) {
                         if (name == c_anchor_name) {
                             QTextCursor cursor(block);
