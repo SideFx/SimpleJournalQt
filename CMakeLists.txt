@@ -95,37 +95,3 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(SimpleJournalQt)
 endif()
 
-# --- Windows ---
-if(WIN32)
-    set(QM_DEST ${CMAKE_BINARY_DIR}/translations)
-    add_custom_command(
-        TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${QM_DEST}
-        COMMAND ${CMAKE_COMMAND} -E copy ${QM_FILES} ${QM_DEST}
-    )
-endif()
-
-# --- macOS ---
-if(APPLE)
-    # app bundle
-    set(QM_DEST ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.app/Contents/Resources/i18n)
-    add_custom_command(
-        TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${QM_DEST}
-        COMMAND ${CMAKE_COMMAND} -E copy ${QM_FILES} ${QM_DEST}
-    )
-endif()
-
-# --- Linux/Unix ---
-if(UNIX AND NOT APPLE)
-    # local
-    set(QM_DEST ${CMAKE_BINARY_DIR}/translations)
-    add_custom_command(
-        TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${QM_DEST}
-        COMMAND ${CMAKE_COMMAND} -E copy ${QM_FILES} ${QM_DEST}
-    )
-    # system
-    install(FILES ${QM_FILES} DESTINATION share/${PROJECT_NAME}/translations)
-endif()
-
