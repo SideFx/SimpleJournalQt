@@ -3,6 +3,7 @@
 // Purpose:     The main window (header)
 // Author:      Jan Buchholz
 // Created:     2025-10-13
+// Changed:     2026-04-05
 /////////////////////////////////////////////////////////////////////////////
 
 #include "uilogic.h"
@@ -161,6 +162,9 @@ bool UILogic::deleteListItem(){
     if (m_listWidget->count() > 0) {
         QListWidgetItem *item_c = m_listWidget->item(0);
         m_listWidget->setCurrentItem(item_c);
+    } else {
+        m_mdViewer->clear();
+        m_mdEditor->clear();
     }
     return true;
 }

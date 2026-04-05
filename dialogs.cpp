@@ -3,6 +3,7 @@
 // Purpose:     File- and message dialogs
 // Author:      Jan Buchholz
 // Created:     2025-10-13
+// Changed:     2026-04-05
 /////////////////////////////////////////////////////////////////////////////
 
 #include "dialogs.h"
@@ -97,10 +98,8 @@ int Dialogs::yesNoCancelDialog(QString title, QString message, QMessageBox::Icon
     msg.setText(message);
     msg.setWindowTitle(title);
     msg.setIcon(icon);
-    msg.addButton(tr("Yes"), QMessageBox::YesRole);
-    msg.addButton(tr("No"), QMessageBox::NoRole);
-    QPushButton* cancelButton = msg.addButton(tr("Cancel"), QMessageBox::RejectRole);
-    msg.setDefaultButton(cancelButton);
+    msg.setStandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+    msg.setDefaultButton(QMessageBox::Cancel);
     return msg.exec();
 }
 

@@ -58,3 +58,11 @@ organizing and editing notes with Markdown support:
 [Special thanks to Martin Mitáš (mity) and all contributors to the md4c library.](https://github.com/mity/md4c)
 
 
+### Updates
+
+**2026-04-05:**
+- Fixed YesNoCancel dialog
+- Fixed delete last remaining note logic
+
+
+
