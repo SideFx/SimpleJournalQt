@@ -3,6 +3,7 @@
 // Purpose:     Keep MD viewer in sync with MD editor
 // Author:      Jan Buchholz
 // Created:     2025-11-26
+// Changed:     2026-04-07
 /////////////////////////////////////////////////////////////////////////////
 
 #include "synchelper.h"
@@ -38,7 +39,8 @@ void SyncHelper::syncToViewer() {
     m_editor->blockSignals(false);
     QString markdown = m_editor->toPlainText();
     // emulate highlighting
-    QRegularExpression re("==([^\\s].*?[^\\s])==");
+    // QRegularExpression re("==([^\\s].*?[^\\s])==");
+    QRegularExpression re("==([^=]+)=="); // more tolerant
     markdown.replace(re, c_highlighting);
     QByteArray ba = markdown.toUtf8();
     std::string html;
@@ -48,7 +50,7 @@ void SyncHelper::syncToViewer() {
             auto* out = static_cast<std::string*>(userdata);
             out->append(text, size);
         },
-        &html, MD_FLAG_TABLES | MD_FLAG_STRIKETHROUGH, 0);
+        &html, MD_FLAG_TABLES | MD_FLAG_STRIKETHROUGH | MD_FLAG_HARD_SOFT_BREAKS, 0);
     QString content = QString::fromUtf8( html.data(), html.size());
     m_viewer->setHtml(content);
     // remove marker in editor

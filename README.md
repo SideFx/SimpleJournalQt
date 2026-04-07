@@ -64,5 +64,8 @@ organizing and editing notes with Markdown support:
 - Fixed YesNoCancel dialog
 - Fixed delete last remaining note logic
 
+**2026-04-07:**
+- Added MD_FLAG_HARD_SOFT_BREAK to md4c flags
+- Made highlighting more tolerant
 
 
