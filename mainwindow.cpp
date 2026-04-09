@@ -135,6 +135,15 @@ void MainWindow::createSplitters() {
     m_editorSplitter->addWidget(mc_uiLogic->getmdEditor());
     m_mainSplitter->addWidget(m_editorSplitter);
     m_mainSplitter->setChildrenCollapsible(false);
+    auto *handle = m_treeSplitter->handle(1);
+    if (handle) {
+        handle->setVisible(false);
+        handle->setEnabled(false);
+    }
+#if defined(Q_OS_MAC)
+    m_mainSplitter->setStyleSheet(styleSplitterHandle);
+    m_editorSplitter->setStyleSheet(styleSplitterHandle);
+#endif
 }
 
 void MainWindow::createStatusBar() {
@@ -275,6 +284,15 @@ void MainWindow::setLockStatus() {
     mc_uiLogic->getListWidget()->setDragEnabled(!b && c);
     if (b) m_editorSplitter->setSizes({1, 0});
     else m_editorSplitter->setSizes({1, 1});
+    auto *handle = m_editorSplitter->handle(1);
+    if (handle) {
+        handle->setVisible(!b);
+        handle->setEnabled(!b);
+    }
+#if defined(Q_OS_MAC)
+    if (b) m_editorSplitter->setHandleWidth(0);
+    else m_editorSplitter->setHandleWidth(3);
+#endif
 }
 
 void MainWindow::closeEvent(QCloseEvent *e) {

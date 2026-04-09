@@ -68,4 +68,10 @@ organizing and editing notes with Markdown support:
 - Added MD_FLAG_HARD_SOFT_BREAK to md4c flags
 - Made highlighting more tolerant
 
+**2026-04-09:**
+- macOS UI fixes only:
+- added splitter handle stylesheets to splitters to reduce handle with
+- explicitly set handle width to zero in viewer only mode since hiding the handle completely failed
+
+
 

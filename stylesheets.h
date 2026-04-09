@@ -3,6 +3,7 @@
 // Purpose:     Style sheets for QToolBar & QToolButton
 // Author:      Jan Buchholz
 // Created:     2025-10-13
+// Changed:     2026-04-09
 /////////////////////////////////////////////////////////////////////////////
 
 #pragma once
@@ -52,5 +53,15 @@ QString styleToolBar = R"(
         QToolBar > QToolButton:checked {
             background-color: darkGray;
             border-color: auto;
+        }
+)";
+
+// reduce the size of the splitter handle for macOS
+QString styleSplitterHandle = R"(
+        QSplitter::handle:horizontal {
+            width: 3px;
+        }
+        QSplitter::handle:vertical {
+            height: 3px;
         }
 )";
