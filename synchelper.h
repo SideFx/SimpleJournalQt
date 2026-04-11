@@ -3,6 +3,7 @@
 // Purpose:     Keep MD viewer in sync with MD editor (header)
 // Author:      Jan Buchholz
 // Created:     2025-11-26
+// Changed:     2026-04-09
 /////////////////////////////////////////////////////////////////////////////
 
 #pragma once
@@ -30,8 +31,6 @@ private:
     QString m_documentPath;
     void processImages();
 
-    const QString c_anchor = "<a name=\"sync\" hidden>&nbsp;</a>";
-    const QString c_anchor_name = "sync";
     const QString c_highlighting = "<span style=\"background-color:#FAE098\">\\1</span>";
 };
 

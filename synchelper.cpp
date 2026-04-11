@@ -3,12 +3,13 @@
 // Purpose:     Keep MD viewer in sync with MD editor
 // Author:      Jan Buchholz
 // Created:     2025-11-26
-// Changed:     2026-04-07
+// Changed:     2026-04-10
 /////////////////////////////////////////////////////////////////////////////
 
 #include "synchelper.h"
 #include <QTextBlock>
 #include <QScrollBar>
+#include <QTimer>
 #include <QRegularExpression>
 #include "md4c/src/md4c-html.h"
 
@@ -24,22 +25,12 @@ SyncHelper::~SyncHelper() {
 
 void SyncHelper::syncToViewer() {
     if (!m_editor || !m_viewer) return;
-    // insert marker in editor
-    m_editor->blockSignals(true);
-    QTextCursor eCursor = m_editor->textCursor();
-    int oldPos = eCursor.position();
-    QTextBlock eBlock = eCursor.block();
-    if (eBlock.isValid()) {
-        eCursor.movePosition(QTextCursor::EndOfBlock);
-        eCursor.insertText(c_anchor);
-        // old position + marker length
-        eCursor.setPosition(oldPos + c_anchor.length());
-        m_editor->setTextCursor(eCursor);
-    }
-    m_editor->blockSignals(false);
+    // compute ratio of current position in editor
+    int pos = m_editor->textCursor().position();
+    int docLen = m_editor->document()->characterCount();
+    double ratio = docLen > 0 ? double(pos) / double(docLen) : 0.0;
     QString markdown = m_editor->toPlainText();
     // emulate highlighting
-    // QRegularExpression re("==([^\\s].*?[^\\s])==");
     QRegularExpression re("==([^=]+)=="); // more tolerant
     markdown.replace(re, c_highlighting);
     QByteArray ba = markdown.toUtf8();
@@ -53,41 +44,16 @@ void SyncHelper::syncToViewer() {
         &html, MD_FLAG_TABLES | MD_FLAG_STRIKETHROUGH | MD_FLAG_HARD_SOFT_BREAKS, 0);
     QString content = QString::fromUtf8( html.data(), html.size());
     m_viewer->setHtml(content);
-    // remove marker in editor
-    m_editor->blockSignals(true);
-    QTextCursor eFound = m_editor->document()->find(c_anchor);
-    if (!eFound.isNull()) {
-        eFound.removeSelectedText(); // delete marker
-    }
-    eCursor.setPosition(oldPos);
-    m_editor->setTextCursor(eCursor);
-    m_editor->blockSignals(false);
     // load and scale pictures
     processImages();
-    // scroll to position by searching for anchor
+    // force html reformatting
     QTextDocument* doc = m_viewer->document();
-    doc->markContentsDirty(0, doc->characterCount()); // force html reformatting
-     for (QTextBlock block = doc->begin(); block != doc->end(); block = block.next()) {
-        for (auto it = block.begin(); !it.atEnd(); it++) {
-            QTextFragment frag = it.fragment();
-            if (frag.isValid()) {
-                if (frag.charFormat().isAnchor()) {
-                    QTextCharFormat ch = frag.charFormat().toCharFormat();
-                    const QStringList list = ch.anchorNames();
-                    for (const auto &name : list) {
-                        if (name == c_anchor_name) {
-                            QTextCursor cursor(block);
-                            cursor.movePosition(QTextCursor::EndOfBlock);
-                            m_viewer->setTextCursor(cursor);
-                            m_viewer->update();
-                            m_viewer->ensureCursorVisible();                           
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-    }
+    doc->markContentsDirty(0, doc->characterCount());
+    // scroll viewer to document position determined by ratio
+    QTimer::singleShot(0, this, [this, ratio]() {
+        auto* sb = m_viewer->verticalScrollBar();
+        sb->setValue(int(ratio * sb->maximum()));
+    });
 }
 
 void SyncHelper::processImages() {

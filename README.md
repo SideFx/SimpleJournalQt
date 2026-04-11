@@ -73,5 +73,5 @@ organizing and editing notes with Markdown support:
 - added splitter handle stylesheets to splitters to reduce handle with
 - explicitly set handle width to zero in viewer only mode since hiding the handle completely failed
 
-
-
+**2026-04-10:**
+- Completely redesigned the logic to keep editor and viewer in sync
