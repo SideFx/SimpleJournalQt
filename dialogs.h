@@ -3,6 +3,7 @@
 // Purpose:     File- and message dialogs header
 // Author:      Jan Buchholz
 // Created:     2025-10-13
+// Changed:     2026-05-22
 /////////////////////////////////////////////////////////////////////////////
 
 #pragma once
@@ -16,7 +17,7 @@ class Dialogs : public QObject {
     Q_OBJECT
 
 public:
-    explicit Dialogs(QWidget *parent = nullptr);
+    explicit Dialogs(QMainWindow *parent = nullptr);
     ~Dialogs();
     QString showOpenFileDialog(QString folder);
     QString showSaveFileDialog(QString folder, QString fileName);
@@ -27,7 +28,7 @@ public:
     const QString UNTITLED_DOCUMENT = tr("NoName.smp");
 
 private:
-    QMainWindow *mainWindow;
+    QMainWindow* m_mainWindow;
     int yesNoCancelDialog(QString title, QString message, QMessageBox::Icon icon);
     QString const MSG_WANTSAVE = QObject::tr("Should the changes be saved before closing?\n"
                                              "If you don't save, the changes will be lost.");

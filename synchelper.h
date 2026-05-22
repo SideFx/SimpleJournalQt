@@ -3,7 +3,7 @@
 // Purpose:     Keep MD viewer in sync with MD editor (header)
 // Author:      Jan Buchholz
 // Created:     2025-11-26
-// Changed:     2026-04-09
+// Changed:     2026-05-22
 /////////////////////////////////////////////////////////////////////////////
 
 #pragma once
@@ -17,7 +17,7 @@ class SyncHelper : public QObject {
     Q_OBJECT
 
 public:
-    SyncHelper(QTextEdit* editor, QTextBrowser* viewer);
+    SyncHelper(QTextEdit* editor, QTextBrowser* viewer, QObject* parent);
     ~SyncHelper();
     void syncToViewer();
     void setDocumentPath(QString path) { m_documentPath = path; }

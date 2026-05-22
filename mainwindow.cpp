@@ -3,6 +3,7 @@
 // Purpose:     The main window
 // Author:      Jan Buchholz
 // Created:     2025-10-13
+// Changed:     2026-05-22
 /////////////////////////////////////////////////////////////////////////////
 
 #include "mainwindow.h"
@@ -17,10 +18,11 @@
 #include "aboutdialog.h"
 #include "io.h"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
+                                          ui(new Ui::MainWindow),
+                                          mc_dialogs(this) {
     ui->setupUi(this);
     mc_uiLogic = new UILogic(this);
-    mc_dialogs = new Dialogs(this);
     ui->mainAppInfo->setToolTip(tr("About") + " " + APPNAME);
     ui->mainAppInfo->setText(tr("About") + " " + APPNAME);
     createToolBars();
@@ -31,35 +33,25 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     setUnifiedTitleAndToolBarOnMac(true);
     loadPreferences();
     setConnections();
-    m_synchronizer =new ScrollSynchronizer(mc_uiLogic->getmdViewer(),
-        mc_uiLogic->getmdEditor(), m_editorSplitter);
+    m_synchronizer = new ScrollSynchronizer(mc_uiLogic->getmdViewer(),
+        mc_uiLogic->getmdEditor(), m_mainSplitter, this);
     m_synchronizer->setEnabled(true);
     fileNew();
 }
 
 MainWindow::~MainWindow() {
     delete ui;
-    delete m_fontComboBox;
-    delete m_fontSizeBox;
-    delete m_mainToolBar;
-    delete m_mainListToolBar;
-    delete m_statusBar;
-    delete mc_uiLogic;
-    delete m_editorSplitter;
-    delete m_treeSplitter;
-    delete m_mainSplitter;
-    delete mc_dialogs;
 }
 
 void MainWindow::createToolBars() {
-    m_mainToolBar = new QToolBar;
+    m_mainToolBar = new QToolBar(this);
     m_mainToolBar->setObjectName("mainToolbar");
     m_mainToolBar->setMovable(false);
     m_mainToolBar->setOrientation(Qt::Horizontal);
     m_mainToolBar->setAutoFillBackground(true);
     m_mainToolBar->setIconSize(QSize(DEF_ICONSIZE, DEF_ICONSIZE));
     m_mainToolBar->setFixedHeight(26);
-    m_mainListToolBar = new QToolBar;
+    m_mainListToolBar = new QToolBar(this);
     m_mainListToolBar->setObjectName("treeToolbar");
     m_mainListToolBar->setMovable(false);
     m_mainListToolBar->setOrientation(Qt::Horizontal);
@@ -100,17 +92,17 @@ void MainWindow::createToolBars() {
     m_mainToolBar->addSeparator();
     m_mainToolBar->addAction(ui->mainToggleLock);
     m_mainToolBar->addSeparator();
-    QWidget* spacerSmall = new QWidget;
+    QWidget* spacerSmall = new QWidget(this);
     spacerSmall->setMinimumWidth(25);
     m_mainToolBar->addWidget(spacerSmall);
-    m_fontComboBox = new QFontComboBox;
+    m_fontComboBox = new QFontComboBox(this);
     m_fontComboBox->setFontFilters(QFontComboBox::ScalableFonts);
     m_fontComboBox->setWritingSystem(QFontDatabase::Latin);
     m_mainToolBar->addWidget(m_fontComboBox);
-    m_fontSizeBox = new QComboBox;
+    m_fontSizeBox = new QComboBox(this);
     m_fontSizeBox->addItems(fontSizeList);
     m_mainToolBar->addWidget(m_fontSizeBox);
-    QWidget* spacerLarge = new QWidget;
+    QWidget* spacerLarge = new QWidget(this);
     spacerLarge->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_mainToolBar->addWidget(spacerLarge);
     m_mainToolBar->addAction(ui->mainAppInfo);
@@ -118,17 +110,17 @@ void MainWindow::createToolBars() {
 }
 
 void MainWindow::createSplitters() {
-    m_mainSplitter = new QSplitter;
+    m_mainSplitter = new QSplitter(this);
     m_mainSplitter->setObjectName("mainSplitter");
     m_mainSplitter->setOrientation(Qt::Horizontal);
-    m_treeSplitter = new QSplitter;
+    m_treeSplitter = new QSplitter(this);
     m_treeSplitter->setObjectName("treeSplitter");
     m_treeSplitter->setOrientation(Qt::Vertical);
     m_treeSplitter->setHandleWidth(0);
     m_treeSplitter->addWidget(m_mainListToolBar);
     m_treeSplitter->addWidget(mc_uiLogic->getListWidget());
     m_mainSplitter->addWidget(m_treeSplitter);
-    m_editorSplitter = new QSplitter;
+    m_editorSplitter = new QSplitter(this);
     m_editorSplitter->setObjectName("editorSplitter");
     m_editorSplitter->setOrientation(Qt::Vertical);
     m_editorSplitter->addWidget(mc_uiLogic->getmdViewer());
@@ -147,7 +139,7 @@ void MainWindow::createSplitters() {
 }
 
 void MainWindow::createStatusBar() {
-    m_statusBar = new QStatusBar;
+    m_statusBar = new QStatusBar(this);
     this->setStatusBar(m_statusBar);
 #if defined(Q_OS_MAC)
     m_statusBar->setVisible(false);
@@ -215,28 +207,27 @@ void MainWindow::setConnections() {
 }
 
 void MainWindow::savePreferences() {
-    JBPreferences *prefs = new JBPreferences();
-    prefs->PushArray(SET_WGEOMETRY, saveGeometry());
-    prefs->PushArray(SET_WSTATE, saveState(0));
-    prefs->PushArray(SET_SSTATE, m_mainSplitter->saveState());
-    prefs->PushString(SET_LASTFOLDER, m_lastFolder);
-    prefs->PushFont(SET_EDITORFONT, mc_uiLogic->getmdViewer()->font());
-    prefs->PushFont(SET_LISTFONT, mc_uiLogic->getListWidget()->font());
+    JBPreferences prefs;
+    prefs.PushArray(SET_WGEOMETRY, saveGeometry());
+    prefs.PushArray(SET_WSTATE, saveState(0));
+    prefs.PushArray(SET_SSTATE, m_mainSplitter->saveState());
+    prefs.PushString(SET_LASTFOLDER, m_lastFolder);
+    prefs.PushFont(SET_EDITORFONT, mc_uiLogic->getmdViewer()->font());
+    prefs.PushFont(SET_LISTFONT, mc_uiLogic->getListWidget()->font());
     quint64 iconSize = mc_uiLogic->getListWidget()->iconSize().width();
-    prefs->PushNumber(SET_ICONSIZE, iconSize);
-    prefs->SavePreferencesToDefaultLocation(SET_COMPANY, APPNAME);
-    delete prefs;
+    prefs.PushNumber(SET_ICONSIZE, iconSize);
+    prefs.SavePreferencesToDefaultLocation(SET_COMPANY, APPNAME);
 }
 
 void MainWindow::loadPreferences() {
-    JBPreferences *prefs = new JBPreferences();
-    if (prefs->LoadPreferencesFromDefaultLocation(SET_COMPANY, APPNAME)) {
+    JBPreferences prefs;
+    if (prefs.LoadPreferencesFromDefaultLocation(SET_COMPANY, APPNAME)) {
         try {
-            restoreGeometry(prefs->PopArray(SET_WGEOMETRY));
-            restoreState(prefs->PopArray(SET_WSTATE));
-            m_mainSplitter->restoreState(prefs->PopArray(SET_SSTATE));
-            m_lastFolder = prefs->PopString(SET_LASTFOLDER);
-            QFont efont = prefs->PopFont(SET_EDITORFONT);
+            restoreGeometry(prefs.PopArray(SET_WGEOMETRY));
+            restoreState(prefs.PopArray(SET_WSTATE));
+            m_mainSplitter->restoreState(prefs.PopArray(SET_SSTATE));
+            m_lastFolder = prefs.PopString(SET_LASTFOLDER);
+            QFont efont = prefs.PopFont(SET_EDITORFONT);
             if (!efont.family().isEmpty()) {
                 m_fontComboBox->setCurrentFont(efont);
                 QString esize = QString::number(efont.pointSize());
@@ -244,18 +235,18 @@ void MainWindow::loadPreferences() {
                 mc_uiLogic->getmdViewer()->setFont(efont);
                 mc_uiLogic->getmdEditor()->setFont(efont);
             }
-            QFont lFont = prefs->PopFont(SET_LISTFONT);
+            QFont lFont = prefs.PopFont(SET_LISTFONT);
             if (!lFont.family().isEmpty()) {
                 mc_uiLogic->getListWidget()->setFont(lFont);
             }
-            quint64 iconSize = prefs->PopNumber(SET_ICONSIZE);
+            quint64 iconSize = prefs.PopNumber(SET_ICONSIZE);
             if (iconSize < MIN_ICONSIZE || iconSize > MAX_ICONSIZE) iconSize = DEF_ICONSIZE;
             mc_uiLogic->getListWidget()->setIconSize(QSize(iconSize, iconSize));
         }
         catch (...) {}
     }
-    delete prefs;
-    if (m_lastFolder.isEmpty()) m_lastFolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+    if (m_lastFolder.isEmpty())
+        m_lastFolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
 }
 
 void MainWindow::setLockStatus() {
@@ -297,7 +288,7 @@ void MainWindow::setLockStatus() {
 
 void MainWindow::closeEvent(QCloseEvent *e) {
     if (isWindowModified()) {
-        int answer = mc_dialogs->showDialogUnsavedChanges();
+        int answer = mc_dialogs.showDialogUnsavedChanges();
         if (answer == QMessageBox::Cancel) {
             e->ignore();
             return;
@@ -368,7 +359,7 @@ void MainWindow::onEditFormat() {
 
 void MainWindow::onNewFile() {
     if (isWindowModified()) {
-        int answer = mc_dialogs->showDialogUnsavedChanges();
+        int answer = mc_dialogs.showDialogUnsavedChanges();
         if(answer == QMessageBox::Cancel) return;
         if(answer == QMessageBox::Yes) {
             if (!fileSave()) return;
@@ -450,7 +441,7 @@ void MainWindow::onEditNote() {
 
 void MainWindow::onDeleteNote() {
     if (mc_uiLogic->isAnyItemSelected()) {
-        if (mc_dialogs->showDialogDeleteNote() == QMessageBox::Yes) {
+        if (mc_dialogs.showDialogDeleteNote() == QMessageBox::Yes) {
             if (mc_uiLogic->deleteListItem()) {
                 settingsAfterDeleteNote();
             }
@@ -470,28 +461,27 @@ void MainWindow::fileNew() {
 
 bool MainWindow::fileOpen() {
     if (isWindowModified()) {
-        int answer = mc_dialogs->showDialogUnsavedChanges();
+        int answer = mc_dialogs.showDialogUnsavedChanges();
         if (answer == QMessageBox::Cancel) return true;
         if (answer == QMessageBox::Ok) {
             return fileSave();
         }
     }
-    QString fName = mc_dialogs->showOpenFileDialog(m_lastFolder);
+    QString fName = mc_dialogs.showOpenFileDialog(m_lastFolder);
     if (!fName.isEmpty()) {
         QFileInfo fileInfo(fName);
         m_lastFolder = fileInfo.path();
         m_fileName = fileInfo.fileName();
         QByteArray ba;
-        Io* io = new Io();
-        QString result = io->load(fName, &ba);
-        delete io;
+        Io io;
+        QString result = io.load(fName, &ba);
         if (result.isEmpty()) {
             mc_uiLogic->startUp(ba, m_lastFolder);
             QString title = QString(APPNAME) + " - " + fileInfo.fileName() + PLACEHOLDER;
             setWindowTitle(title);
             settingsAfterLoad();
             return true;
-        } else mc_dialogs->showDialogDisplayError(result);
+        } else mc_dialogs.showDialogDisplayError(result);
     }
     return false;
 }
@@ -499,7 +489,7 @@ bool MainWindow::fileOpen() {
 bool MainWindow::fileSave(bool saveAs) { //saveAs default false
     QString fName;
     if (m_lastFolder.isEmpty() || m_fileName.isEmpty() || saveAs) {
-        fName = mc_dialogs->showSaveFileDialog(m_lastFolder, m_fileName);
+        fName = mc_dialogs.showSaveFileDialog(m_lastFolder, m_fileName);
         if (fName.isEmpty()) return false;
         QFileInfo fileInfo(fName);
         m_lastFolder = fileInfo.path();
@@ -509,9 +499,8 @@ bool MainWindow::fileSave(bool saveAs) { //saveAs default false
         fName = fileInfo.absoluteFilePath();
     }
     QByteArray ba = mc_uiLogic->dataToJson();
-    Io* io = new Io();
-    QString result = io->save(fName, ba);
-    delete io;
+    Io io;
+    QString result = io.save(fName, ba);
     if (result.isEmpty()) {
         mc_uiLogic->refreshDocument(m_lastFolder);
         QString title = QString(APPNAME) + " - " + m_fileName + PLACEHOLDER;
@@ -519,7 +508,7 @@ bool MainWindow::fileSave(bool saveAs) { //saveAs default false
         setWindowModified(false);
         return true;
 
-    } else mc_dialogs->showDialogDisplayError(result);
+    } else mc_dialogs.showDialogDisplayError(result);
     return false;
 }
 
@@ -552,7 +541,7 @@ void MainWindow::settingsAfterNew() {
     ui->listDeleteNote->setEnabled(false);
     //user must add new note first!
     mc_uiLogic->getmdEditor()->setReadOnly(true);
-    QString title = QString(APPNAME) + " - " + mc_dialogs->UNTITLED_DOCUMENT + PLACEHOLDER;
+    QString title = QString(APPNAME) + " - " + mc_dialogs.UNTITLED_DOCUMENT + PLACEHOLDER;
     setWindowTitle(title);
     setWindowModified(false);
 }

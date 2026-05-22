@@ -3,6 +3,7 @@
 // Purpose:     Load pictures (gif, png, jpeg, webp, svg)
 // Author:      Jan Buchholz
 // Created:     2025-11-25
+// Changed:     2026-05-22
 /////////////////////////////////////////////////////////////////////////////
 
 #include "imagehandler.h"
@@ -18,14 +19,13 @@
 #include <QPainter>
 #include <qnetworkreply.h>
 
-ImageHandler::ImageHandler(QObject *parent) : QObject{parent} {
-    m_manager = new QNetworkAccessManager();
+ImageHandler::ImageHandler(QObject *parent) :
+    QObject(parent),
+    m_manager(new QNetworkAccessManager(this)) {
     invalidateCache();
 }
 
-ImageHandler::~ImageHandler() {
-    delete m_manager;
-}
+ImageHandler::~ImageHandler() {}
 
 QImage ImageHandler::getFromCache(QString name, QString workDir) {
     if (const auto it = m_cache.find(name); it != m_cache.end()) {

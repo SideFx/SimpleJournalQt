@@ -3,7 +3,7 @@
 // Purpose:     Keep MD viewer in sync with MD editor
 // Author:      Jan Buchholz
 // Created:     2025-11-26
-// Changed:     2026-04-10
+// Changed:     2026-05-22
 /////////////////////////////////////////////////////////////////////////////
 
 #include "synchelper.h"
@@ -13,15 +13,14 @@
 #include <QRegularExpression>
 #include "md4c/src/md4c-html.h"
 
-SyncHelper::SyncHelper(QTextEdit* editor, QTextBrowser* viewer)
-    : m_editor(editor), m_viewer(viewer) {
-    mc_handler = new ImageHandler;
+SyncHelper::SyncHelper(QTextEdit* editor, QTextBrowser* viewer, QObject* parent) :
+    m_editor(editor),
+    m_viewer(viewer),
+    mc_handler(new ImageHandler(this)) {
     m_documentPath.clear();
 }
 
-SyncHelper::~SyncHelper() {
-    delete mc_handler;
-}
+SyncHelper::~SyncHelper() {}
 
 void SyncHelper::syncToViewer() {
     if (!m_editor || !m_viewer) return;

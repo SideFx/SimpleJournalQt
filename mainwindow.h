@@ -3,6 +3,7 @@
 // Purpose:     The main window (header)
 // Author:      Jan Buchholz
 // Created:     2025-10-13
+// Changed:     2026-05-22
 /////////////////////////////////////////////////////////////////////////////
 
 #pragma once
@@ -43,7 +44,7 @@ private:
     UILogic *mc_uiLogic;
     QString m_lastFolder;
     QString m_fileName;
-    Dialogs *mc_dialogs;
+    Dialogs mc_dialogs;
     const QStringList fontSizeList = {"8", "9", "10", "11", "12", "13", "14", "16", "18"};
     void createToolBars();
     void createSplitters();

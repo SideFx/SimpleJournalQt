@@ -3,6 +3,7 @@
 // Purpose:     Load pictures (gif, png, jpeg, webp, svg) (header)
 // Author:      Jan Buchholz
 // Created:     2025-11-25
+// Changed:     2026-05-22
 /////////////////////////////////////////////////////////////////////////////
 
 #pragma once
@@ -27,7 +28,7 @@ private:
     QImage readFromAnywhere(QString path, QString workDir);
     QImage getFromBuffer(QByteArray &buffer);
 
-    QNetworkAccessManager *m_manager;
+    QNetworkAccessManager* m_manager;
     std::map<QString, QImage> m_cache;
 };
 

@@ -3,28 +3,25 @@
 // Purpose:     File- and message dialogs
 // Author:      Jan Buchholz
 // Created:     2025-10-13
-// Changed:     2026-04-05
+// Changed:     2026-05-22
 /////////////////////////////////////////////////////////////////////////////
 
 #include "dialogs.h"
 #include <QFileDialog>
 #include "constants.h"
 
-Dialogs::Dialogs(QWidget *parent) : QObject{parent} {
-    mainWindow = qobject_cast<QMainWindow*>(parent);
-}
+Dialogs::Dialogs(QMainWindow* parent) : QObject(parent), m_mainWindow(parent) {}
 
-Dialogs::~Dialogs() {
-}
+Dialogs::~Dialogs() {}
 
 QString Dialogs::showOpenFileDialog(QString folder) {
     QFileDialog openDialog;
     QString fileName = "";
-    openDialog.setParent(mainWindow, Qt::Dialog|
-                                     Qt::WindowSystemMenuHint|
-                                     Qt::WindowCloseButtonHint|
-                                     Qt::WindowTitleHint|
-                                     Qt::CustomizeWindowHint);
+    openDialog.setParent(m_mainWindow, Qt::Dialog|
+                                       Qt::WindowSystemMenuHint|
+                                       Qt::WindowCloseButtonHint|
+                                       Qt::WindowTitleHint|
+                                       Qt::CustomizeWindowHint);
     openDialog.setDirectory(folder);
     openDialog.setAcceptMode(QFileDialog::AcceptOpen);
     openDialog.setFileMode(QFileDialog::ExistingFile);
@@ -42,11 +39,11 @@ QString Dialogs::showSaveFileDialog(QString folder, QString fileName) {
     QFileDialog saveDialog;
     QString fname;
     if (fileName.isEmpty()) fname = UNTITLED_DOCUMENT; else fname = fileName;
-    saveDialog.setParent(mainWindow, Qt::Dialog|
-                                     Qt::WindowSystemMenuHint|
-                                     Qt::WindowCloseButtonHint|
-                                     Qt::WindowTitleHint|
-                                     Qt::CustomizeWindowHint);
+    saveDialog.setParent(m_mainWindow, Qt::Dialog|
+                                       Qt::WindowSystemMenuHint|
+                                       Qt::WindowCloseButtonHint|
+                                       Qt::WindowTitleHint|
+                                       Qt::CustomizeWindowHint);
     saveDialog.setDirectory(folder);
     saveDialog.setAcceptMode(QFileDialog::AcceptSave);
     saveDialog.setFileMode(QFileDialog::AnyFile);
@@ -72,12 +69,12 @@ int Dialogs::showDialogDeleteNote() {
 
 void Dialogs::showDialogDisplayError(QString message) {
     QMessageBox msg;
-    msg.setParent(mainWindow, Qt::Dialog|
-                              Qt::WindowSystemMenuHint|
-                              Qt::WindowCloseButtonHint|
-                              Qt::WindowTitleHint|
-                              Qt::CustomizeWindowHint|
-                              Qt::MSWindowsFixedSizeDialogHint);
+    msg.setParent(m_mainWindow, Qt::Dialog|
+                                Qt::WindowSystemMenuHint|
+                                Qt::WindowCloseButtonHint|
+                                Qt::WindowTitleHint|
+                                Qt::CustomizeWindowHint|
+                                Qt::MSWindowsFixedSizeDialogHint);
     msg.setWindowModality(Qt::WindowModal);
     msg.setText(message);
     msg.setWindowTitle(APPNAME);
@@ -88,12 +85,12 @@ void Dialogs::showDialogDisplayError(QString message) {
 
 int Dialogs::yesNoCancelDialog(QString title, QString message, QMessageBox::Icon icon) {
     QMessageBox msg;
-    msg.setParent(mainWindow, Qt::Dialog|
-                              Qt::WindowSystemMenuHint|
-                              Qt::WindowCloseButtonHint|
-                              Qt::WindowTitleHint|
-                              Qt::CustomizeWindowHint|
-                              Qt::MSWindowsFixedSizeDialogHint);
+    msg.setParent(m_mainWindow, Qt::Dialog|
+                                Qt::WindowSystemMenuHint|
+                                Qt::WindowCloseButtonHint|
+                                Qt::WindowTitleHint|
+                                Qt::CustomizeWindowHint|
+                                Qt::MSWindowsFixedSizeDialogHint);
     msg.setWindowModality(Qt::WindowModal);
     msg.setText(message);
     msg.setWindowTitle(title);
