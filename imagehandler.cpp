@@ -3,7 +3,7 @@
 // Purpose:     Load pictures (gif, png, jpeg, webp, svg)
 // Author:      Jan Buchholz
 // Created:     2025-11-25
-// Changed:     2026-05-22
+// Changed:     2026-05-23
 /////////////////////////////////////////////////////////////////////////////
 
 #include "imagehandler.h"
@@ -43,7 +43,7 @@ void ImageHandler::invalidateCache() {
 QImage ImageHandler::readFromURL(QUrl url) {
     QImage image;
     QNetworkRequest req(url);
-    req.setRawHeader("User-Agent", "MarkdownEditorQt/1.0");
+    req.setRawHeader("User-Agent", "SimpleJournalQt");
     QNetworkReply* reply = m_manager->get(req);
     QEventLoop loop;
     // finished
