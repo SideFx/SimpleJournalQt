@@ -75,3 +75,6 @@ organizing and editing notes with Markdown support:
 
 **2026-04-10:**
 - Completely redesigned the logic to keep editor and viewer in sync
+
+**2026-05-22:**
+- Refactor: Qt-RAII (parent-child relationship, using stack objects)
