@@ -41,13 +41,13 @@
     <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
    </property>
   </widget>
-  <widget class="QFontComboBox" name="fontComboBox">
+  <widget class="JBFontComboBox" name="fontComboBox">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>118</x>
      <y>20</y>
-     <width>159</width>
-     <height>22</height>
+     <width>181</width>
+     <height>24</height>
     </rect>
    </property>
   </widget>
@@ -66,7 +66,7 @@
     <rect>
      <x>20</x>
      <y>20</y>
-     <width>121</width>
+     <width>91</width>
      <height>20</height>
     </rect>
    </property>
@@ -84,7 +84,7 @@
     <rect>
      <x>20</x>
      <y>50</y>
-     <width>121</width>
+     <width>91</width>
      <height>16</height>
     </rect>
    </property>
@@ -100,7 +100,7 @@
   <widget class="QComboBox" name="iconSizeBox">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>120</x>
      <y>50</y>
      <width>71</width>
      <height>22</height>
@@ -108,6 +108,13 @@
    </property>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>JBFontComboBox</class>
+   <extends>QFontComboBox</extends>
+   <header>jbfontcombobox.hpp</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

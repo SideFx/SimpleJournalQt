@@ -3,7 +3,7 @@
 // Purpose:     Constants and text snippets
 // Author:      Jan Buchholz
 // Created:     2025-10-13
-// Changed:     2026-05-22
+// Changed:     2026-11-06
 /////////////////////////////////////////////////////////////////////////////
 
 #pragma once
@@ -11,7 +11,7 @@
 #include <QString>
 
 #define APPNAME "SimpleJournalQt"
-#define APPVERSION "1.2"
+#define APPVERSION "1.3"
 #define APP_FOLDER "SimpleJournalQt"
 #define SET_COMPANY "org.jan.buchholz"
 #define SET_WGEOMETRY "mainwindow/geometry"
@@ -27,3 +27,4 @@
 int constexpr MAX_ICONSIZE = 24;
 int constexpr MIN_ICONSIZE = 12;
 int constexpr DEF_ICONSIZE = 16;
+int constexpr DEF_TB_HEIGHT = 30;

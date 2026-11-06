@@ -3,6 +3,7 @@
 // Purpose:     Dialog for note list fonts & icons (header)
 // Author:      Jan Buchholz
 // Created:     2025-11-19
+// Changed:     2026-11-06
 /////////////////////////////////////////////////////////////////////////////
 
 #pragma once
@@ -26,7 +27,7 @@ private:
     QFont m_selectedFont;
     int m_selectedFontSize;
     int m_selectedIconSize;
-    const QStringList m_fontSizeList = {"8", "9", "10", "11", "12", "13", "14", "16", "18"};
+    const QStringList m_fontSizeList = {"8", "9", "10", "11", "12", "13", "14", "16", "18", "20", "22"};
     const QStringList m_iconSizeList = {"12", "14", "16", "18", "20", "22", "24"};
 
 private slots:

@@ -3,6 +3,7 @@
 // Purpose:     List of SVG icons for note listbox (header)
 // Author:      Jan Buchholz
 // Created:     2025-10-13
+// Changed:     2026-11-06
 /////////////////////////////////////////////////////////////////////////////
 
 #pragma once
@@ -33,5 +34,6 @@ public:
                                      {"list_Work.svg"}
     };
     QIcon getIconAtIndex(int index);
+    QString getIconPathAtIndex(int index);
 };
 

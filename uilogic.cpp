@@ -3,13 +3,14 @@
 // Purpose:     The main window (header)
 // Author:      Jan Buchholz
 // Created:     2025-10-13
-// Changed:     2026-05-22
+// Changed:     2026-11-06
 /////////////////////////////////////////////////////////////////////////////
 
 #include "uilogic.h"
 #include "listfontdialog.h"
 #include "listitemdialog.h"
 #include "iconlist.h"
+#include "jbstyles.hpp"
 #include <QJsonArray>
 #include <QJsonDocument>
 
@@ -33,7 +34,11 @@ void UILogic::startUp(const QByteArray ba, QString workDir) {
     jsonToData(ba);
     IconList iconList;
     for (auto &j : m_data) {
-        new QListWidgetItem(iconList.getIconAtIndex(j.icon), j.subject, m_listWidget, j.id);
+        QListWidgetItem *item = new QListWidgetItem(m_listWidget, c_userType);
+        item->setData(Qt::UserRole, j.id);
+        item->setIcon(createThemedIcon(iconList.getIconPathAtIndex(j.icon)));
+        item->setText(j.subject);
+        m_listWidget->addItem(item);
         if (m_id < j.id) m_id = j.id;
     }
     if (m_listWidget->count() > 0) {
@@ -49,7 +54,7 @@ void UILogic::resetAll() {
     m_mdEditor->clear();
     m_data.clear();
     mc_synchelper->invalidateImageCache();
-    m_id = QListWidgetItem::UserType;
+    m_id = 0;
 }
 
 void UILogic::createListWidget(){
@@ -92,8 +97,9 @@ bool UILogic::addListItem() {
         data.id = m_id;
         data.payload.clear();
         IconList iconList;
-        QListWidgetItem *item = new QListWidgetItem(m_listWidget, data.id);
-        item->setIcon(iconList.getIconAtIndex(data.icon));
+        QListWidgetItem *item = new QListWidgetItem(m_listWidget, c_userType);
+        item->setData(Qt::UserRole, data.id);
+        item->setIcon(createThemedIcon(iconList.getIconPathAtIndex(data.icon)));
         item->setText(data.subject);
         m_listWidget->addItem(item);
         m_listWidget->setCurrentItem(item);
@@ -115,7 +121,7 @@ bool UILogic::editListItem() {
     ListItemDialog dlg;
     int icon = -1;
     for (auto &p : m_data) {
-        if (p.id == item->type()) {
+        if (p.id == item->data(Qt::UserRole).toInt()) {
             icon = p.icon;
             break;
         }
@@ -125,7 +131,7 @@ bool UILogic::editListItem() {
         item->setText(text);
         item->setIcon(iconList.getIconAtIndex(icon));
         for (auto &p : m_data) {
-            if (p.id == item->type()) {
+            if (p.id == item->data(Qt::UserRole).toInt()) {
                 if (icon != p.icon || text != p.subject) changed = true;
                 p.icon = icon;
                 p.subject = text;
@@ -133,15 +139,29 @@ bool UILogic::editListItem() {
             }
         }
     }
-    m_listWidget->setCurrentItem(item);
     return changed;
+}
+
+// ---react to theme changes (light/dark)---
+void UILogic::updateIcons() {
+    IconList iconList;
+    for (int i = 0; i < m_listWidget->count(); ++i) {
+        QListWidgetItem *item = m_listWidget->item(i);
+        for (auto &p : m_data) {
+            if (p.id == item->data(Qt::UserRole).toInt()) {
+                item->setIcon(createThemedIcon(iconList.getIconPathAtIndex(p.icon)));
+                break;
+            }
+        }
+    }
+    m_listWidget->viewport()->update();
 }
 
 bool UILogic::deleteListItem(){
     QList<QListWidgetItem*> itemList = m_listWidget->selectedItems();
     if (itemList.empty()) return false;
     QListWidgetItem *item_d = itemList[0];
-    int id = item_d->type();
+    int id = item_d->data(Qt::UserRole).toInt();
     m_listWidget->takeItem(m_listWidget->row(item_d));
     for (int i = 0; i < m_data.count(); i++) {
         if (m_data[i].id == id) {
@@ -163,7 +183,7 @@ UILogic::journalData UILogic::getSelectedListItem() {
     QList<QListWidgetItem*> itemList = m_listWidget->selectedItems();
     if (itemList.empty()) return {};
     QListWidgetItem *item_d = itemList[0];
-    int id = item_d->type();
+    int id = item_d->data(Qt::UserRole).toInt();
     for (auto &p : m_data) {
         if (p.id == id) return p;
     }
@@ -212,7 +232,7 @@ QByteArray UILogic::dataToJson() {
     }
     for (int i = 0; i < m_listWidget->count(); i++) {
         QListWidgetItem* item = m_listWidget->item(i);
-        int id = item->type();
+        int id = item->data(Qt::UserRole).toInt();
         for (auto &p : m_data) {
             if (p.id == id) {
                 array.append(journalDataToJson(p));
@@ -267,11 +287,11 @@ void UILogic::onTextChanged() {
 
 void UILogic::onCurrentItemChanged(QListWidgetItem *current, QListWidgetItem *previous) {
     if (previous) {
-        setPayload(previous->type(), m_mdEditor->toPlainText());
+        setPayload(previous->data(Qt::UserRole).toInt(), m_mdEditor->toPlainText());
     }
     if (current) {
         m_textChangeIgnore = true;
-        QString md = getPayLoad(current->type());
+        QString md = getPayLoad(current->data(Qt::UserRole).toInt());
         m_mdEditor->setPlainText(md);
         m_textChangeIgnore = false;
         m_mdEditor->setFocus();

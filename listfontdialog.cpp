@@ -3,22 +3,30 @@
 // Purpose:     Dialog for note list fonts & icons
 // Author:      Jan Buchholz
 // Created:     2025-11-19
+// Changed:     2026-11-06
 /////////////////////////////////////////////////////////////////////////////
 
 #include <QPushButton>
 #include "listfontdialog.h"
+#include "jbfontcombobox.hpp"
 #include "ui_listfontdialog.h"
 
 ListFontDialog::ListFontDialog(QWidget *parent) : QDialog(parent), ui(new Ui::ListFontDialog) {
+    int pointSize = 10;
+#if defined(Q_OS_MACOS)
+    pointSize = 12;
+#endif
     ui->setupUi(this);
+    setStyleSheet("QDialog { background-color: palette(window); }");
     ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("OK"));
     ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
     setFixedSize(this->geometry().width(),this->geometry().height());
     ui->fontComboBox->setFontFilters(QFontComboBox::ScalableFonts);
     ui->fontComboBox->setWritingSystem(QFontDatabase::Latin);
+    ui->fontComboBox->setItemFontSize(pointSize);
     ui->fontSizeBox->addItems(m_fontSizeList);
     ui->iconSizeBox->addItems(m_iconSizeList);
-    connect(ui->fontComboBox, &QFontComboBox::currentFontChanged, this, &ListFontDialog::onCurrentFontChanged);
+    connect(ui->fontComboBox, &JBFontComboBox::currentFontChanged, this, &ListFontDialog::onCurrentFontChanged);
     connect(ui->fontSizeBox, &QComboBox::currentTextChanged, this, &ListFontDialog::onCurrentTextChanged_Font);
     connect(ui->iconSizeBox, &QComboBox::currentTextChanged, this, &ListFontDialog::onCurrentTextChanged_Icon);
 }

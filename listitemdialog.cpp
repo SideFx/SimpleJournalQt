@@ -3,19 +3,21 @@
 // Purpose:     Dialog to set note properties (header)
 // Author:      Jan Buchholz
 // Created:     2025-10-13
+// Changed:     2026-11-06
 /////////////////////////////////////////////////////////////////////////////
 
 #include "listitemdialog.h"
 #include "ui_listitemdialog.h"
 #include "iconlist.h"
+#include "jbstyles.hpp"
 #include <QPushButton>
 
 ListItemDialog::ListItemDialog(QWidget *parent) : QDialog(parent), ui(new Ui::ListItemDialog) {
     ui->setupUi(this);
+    setStyleSheet("QDialog { background-color: palette(window); }");
     ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("OK"));
     ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
     setFixedSize(this->geometry().width(),this->geometry().height());
-    setUpIconBox();
     connect(ui->edit_subject, &QLineEdit::textChanged, this, &ListItemDialog::onTextChanged);
 }
 
@@ -24,6 +26,7 @@ ListItemDialog::~ListItemDialog() {
 }
 
 QDialog::DialogCode ListItemDialog::Execute(mode m, QString *subject, int *icon) {
+    setUpIconBox();
     if (m == edit) {
         ui->edit_subject->setText(*subject);
         if (*icon < ui->iconBox->count()) ui->iconBox->setCurrentIndex(*icon);
@@ -44,11 +47,11 @@ QDialog::DialogCode ListItemDialog::Execute(mode m, QString *subject, int *icon)
 }
 
 void ListItemDialog::setUpIconBox() {
-    IconList *iconList = new IconList();
-    for (int i = 0; i < iconList->m_listIcons.count(); i++) {
-        ui->iconBox->addItem(iconList->getIconAtIndex(i), "", i);
+    IconList iconList;
+    ui->iconBox->clear();
+    for (int i = 0; i < iconList.m_listIcons.count(); i++) {
+        ui->iconBox->addItem(createThemedIcon(iconList.getIconPathAtIndex(i)), "", i);
     }
-    delete iconList;
 }
 
 void ListItemDialog::onTextChanged() {

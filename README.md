@@ -78,3 +78,10 @@ organizing and editing notes with Markdown support:
 
 **2026-05-22:**
 - Refactor: Qt-RAII (parent-child relationship, using stack objects)
+
+**2026-11-06:**
+- App now supports light and dark themes
+- On-the-fly theme switching
+- Refined stylesheets
+- QListWidgetItem, now using Qt::UserRole instead of type() to store the item id
+

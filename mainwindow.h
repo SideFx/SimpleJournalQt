@@ -3,7 +3,7 @@
 // Purpose:     The main window (header)
 // Author:      Jan Buchholz
 // Created:     2025-10-13
-// Changed:     2026-05-22
+// Changed:     2026-11-06
 /////////////////////////////////////////////////////////////////////////////
 
 #pragma once
@@ -15,6 +15,7 @@
 #include <QFontComboBox>
 #include <QCheckBox>
 #include <QLabel>
+#include "jbfontcombobox.hpp"
 #include "dialogs.h"
 #include "uilogic.h"
 #include "scrollsynchronizer.h"
@@ -32,13 +33,14 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void closeEvent(QCloseEvent *e);
+    bool event(QEvent *event);
 
 private:
     Ui::MainWindow *ui;
     QToolBar *m_mainToolBar, *m_mainListToolBar;
     QStatusBar *m_statusBar;
     QSplitter *m_mainSplitter, *m_treeSplitter, *m_editorSplitter;
-    QFontComboBox *m_fontComboBox;
+    JBFontComboBox *m_fontComboBox;
     QComboBox *m_fontSizeBox;
     ScrollSynchronizer *m_synchronizer;
     UILogic *mc_uiLogic;
@@ -46,6 +48,7 @@ private:
     QString m_fileName;
     Dialogs mc_dialogs;
     const QStringList fontSizeList = {"8", "9", "10", "11", "12", "13", "14", "16", "18"};
+    void setIcons();
     void createToolBars();
     void createSplitters();
     void createStatusBar();
