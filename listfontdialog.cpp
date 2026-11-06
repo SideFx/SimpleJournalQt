@@ -17,15 +17,16 @@ ListFontDialog::ListFontDialog(QWidget *parent) : QDialog(parent), ui(new Ui::Li
     pointSize = 12;
 #endif
     ui->setupUi(this);
-    setStyleSheet("QDialog { background-color: palette(window); }");
     ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("OK"));
     ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
-    setFixedSize(this->geometry().width(),this->geometry().height());
     ui->fontComboBox->setFontFilters(QFontComboBox::ScalableFonts);
     ui->fontComboBox->setWritingSystem(QFontDatabase::Latin);
     ui->fontComboBox->setItemFontSize(pointSize);
     ui->fontSizeBox->addItems(m_fontSizeList);
     ui->iconSizeBox->addItems(m_iconSizeList);
+    setAutoFillBackground(true);
+    adjustSize();
+    setFixedSize(size());
     connect(ui->fontComboBox, &JBFontComboBox::currentFontChanged, this, &ListFontDialog::onCurrentFontChanged);
     connect(ui->fontSizeBox, &QComboBox::currentTextChanged, this, &ListFontDialog::onCurrentTextChanged_Font);
     connect(ui->iconSizeBox, &QComboBox::currentTextChanged, this, &ListFontDialog::onCurrentTextChanged_Icon);

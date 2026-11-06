@@ -14,7 +14,7 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
     ui->setupUi(this);
     ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Close"));
     ui->lbl_text1->setText(TxtAboutJournal);
-    setStyleSheet("QDialog { background-color: palette(window); }");
+    setAutoFillBackground(true);
     adjustSize();
     setFixedSize(size());
 }

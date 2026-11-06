@@ -14,11 +14,12 @@
 
 ListItemDialog::ListItemDialog(QWidget *parent) : QDialog(parent), ui(new Ui::ListItemDialog) {
     ui->setupUi(this);
-    setStyleSheet("QDialog { background-color: palette(window); }");
     ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("OK"));
     ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
-    setFixedSize(this->geometry().width(),this->geometry().height());
     connect(ui->edit_subject, &QLineEdit::textChanged, this, &ListItemDialog::onTextChanged);
+    setAutoFillBackground(true);
+    adjustSize();
+    setFixedSize(size());
 }
 
 ListItemDialog::~ListItemDialog() {
