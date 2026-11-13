@@ -3,6 +3,7 @@
 // Purpose:     App preferences
 // Author:      Jan Buchholz
 // Created:     2025-11-19
+// Changed:     2026-11-13
 /////////////////////////////////////////////////////////////////////////////
 
 #include "jbpreferences.h"
@@ -148,6 +149,8 @@ QByteArray JBPreferences::ascii85Encode(const QByteArray ba) {
     const quint64 l = ba.size();
     uint8_t c;
     while (i < l) {
+        number = 0;
+        pad = 0;
         for (j = 0; j < 4; j++) {
             if (i < l) c = ba[i++]; else {
                 c = 0x00;
@@ -155,7 +158,7 @@ QByteArray JBPreferences::ascii85Encode(const QByteArray ba) {
             }
             (number <<= 8) |= c;
         }
-        if (number > 0) {
+        if (number > 0 || pad > 0) {
             enc[4] = (number % 85) + cBase;
             number /= 85;
             enc[3] = (number % 85) + cBase;
